@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kutlubay Otel | Dörtyol Hatay</title>
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-    <!-- Google Translate API -->
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <style>
         :root {
@@ -397,7 +395,6 @@
                         <option value="Hayır">Hayır (Çocuk Yok)</option>
                         <option value="1 Çocuk">Evet (1 Çocuk)</option>
                         <option value="2 Çocuk">Evet (2 Çocuk)</option>
-                        <option value="3 Çocuk">Evet (3 & fazlası Çocuk)</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -417,7 +414,7 @@
         </div>
 
         <div style="background:var(--card-bg); padding:20px; border-radius:10px; margin-top:20px;">
-            <h3 style="color:var(--accent); margin-bottom:12px;">🖼️ Ana Ekran Arka Plan Medyaları (Canlı Güncelleme)</h3>
+            <h3 style="color:var(--accent); margin-bottom:12px;">🖼️ Ana Ekran Arka Plan Medyaları</h3>
             <div style="display:grid; grid-template-columns:1fr 2fr; gap:15px;">
                 <form onsubmit="addHeroMedia(event)">
                     <div class="form-group">
@@ -438,7 +435,7 @@
                     <div class="form-group">
                         <label>Galeriden Otomatik Yükle</label>
                         <input type="file" accept="image/*,video/*" onchange="uploadHeroMediaAuto(this)">
-                        <div id="hero-loading" class="loading-text">⏳ Resim ImgBB'ye yükleniyor, lütfen bekleyin...</div>
+                        <div id="hero-loading" class="loading-text">⏳ Yükleniyor, lütfen bekleyin...</div>
                     </div>
                     <div class="form-group">
                         <label>Veya Link Girin</label>
@@ -480,7 +477,7 @@
                     <div class="form-group">
                         <label>Galeriden Otomatik Yükle</label>
                         <input type="file" accept="image/*,video/*" onchange="uploadRoomMediaAuto(this)" style="margin-bottom:6px;">
-                        <div id="room-loading" class="loading-text">⏳ Resim ImgBB'ye yükleniyor, lütfen bekleyin...</div>
+                        <div id="room-loading" class="loading-text">⏳ Yükleniyor, lütfen bekleyin...</div>
                         <input type="text" id="admin-media-url" placeholder="https://..." required style="margin-top:6px;">
                     </div>
                     <div class="form-group">
@@ -515,7 +512,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyCBFMg9q41dl-11m1jr4a-JDIkmpwgJWCc",
             authDomain: "kutlubay-otel.firebaseapp.com",
-            databaseURL: "https://kutlubay-otel-default-rtdb.firebaseio.com",
+            databaseURL: "https://kutlubay-otel-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "kutlubay-otel",
             storageBucket: "kutlubay-otel.firebasestorage.app",
             messagingSenderId: "550246474083",
@@ -527,38 +524,34 @@
             firebase.initializeApp(firebaseConfig);
             db = firebase.database();
         } catch(e) {
-            console.error("Firebase hatasi:", e);
+            console.error("Firebase hatası:", e);
         }
 
-        let heroMediaList = [
-            { id: 'h1', type: 'image', url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80', fit: 'center' },
-            { id: 'h2', type: 'image', url: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80', fit: 'center' }
-        ];
-
-        let rooms = [
-            { id: '1', title: 'Standart Çift Kişilik Oda', desc: 'Klima, TV, mini bar, ücretsiz Wi-Fi.', price: '1200', type: 'image', media: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=600&q=80', status: 'available' },
-            { id: '2', title: 'Kral Süiti / Şehir Manzaralı', desc: 'Geniş oturma alanı, jakuzi, özel manzara.', price: '2500', type: 'image', media: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80', status: 'available' }
-        ];
-
+        let heroMediaList = [];
+        let rooms = [];
         let sliderInterval = null;
 
         if (db) {
             db.ref('hero_media').on('value', snapshot => {
                 const data = snapshot.val();
                 if (data) {
-                    heroMediaList = Array.isArray(data) ? data : Object.values(data);
-                    renderHeroSlider();
-                    if (document.getElementById('admin-panel').style.display === 'block') renderAdminHeroList();
+                    heroMediaList = typeof data === 'object' ? Object.values(data) : data;
+                } else {
+                    heroMediaList = [];
                 }
+                renderHeroSlider();
+                if (document.getElementById('admin-panel').style.display === 'block') renderAdminHeroList();
             });
 
             db.ref('rooms').on('value', snapshot => {
                 const data = snapshot.val();
                 if (data) {
-                    rooms = Array.isArray(data) ? data : Object.values(data);
-                    renderCustomerRooms();
-                    if (document.getElementById('admin-panel').style.display === 'block') renderAdminRooms();
+                    rooms = typeof data === 'object' ? Object.values(data) : data;
+                } else {
+                    rooms = [];
                 }
+                renderCustomerRooms();
+                if (document.getElementById('admin-panel').style.display === 'block') renderAdminRooms();
             });
         }
 
@@ -688,7 +681,9 @@
             const url = document.getElementById('hero-media-url').value;
             if (!url) return alert('Lütfen görsel veya video yükleyin!');
 
-            heroMediaList.push({ id: Date.now().toString(), type, fit, url });
+            const newItem = { id: 'h_' + Date.now(), type, fit, url };
+            heroMediaList.push(newItem);
+            
             if (db) db.ref('hero_media').set(heroMediaList);
             document.getElementById('hero-media-url').value = '';
             renderAdminHeroList();
@@ -813,9 +808,11 @@
 
             if(editId) {
                 const index = rooms.findIndex(r => r.id === editId);
-                rooms[index] = { id: editId, title, desc, price, type, media, status };
+                if(index !== -1) {
+                    rooms[index] = { id: editId, title, desc, price, type, media, status };
+                }
             } else {
-                rooms.push({ id: Date.now().toString(), title, desc, price, type, media, status });
+                rooms.push({ id: 'r_' + Date.now(), title, desc, price, type, media, status });
             }
 
             if (db) db.ref('rooms').set(rooms);

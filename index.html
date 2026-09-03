@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kutlubay Otel | Dörtyol Hatay</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <style>
         :root {
             --primary: #1a365d;
@@ -29,15 +28,22 @@
             overflow-x: hidden;
         }
 
-        /* --- MÜŞTERİ EKRANI --- */
-        #customer-view {
-            display: block;
-            min-height: 100vh;
+        /* Dil Seçici Üst Bar */
+        #lang-selector {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 5px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--accent);
         }
 
-        /* Animasyonlu Açılış Header */
+        /* Hero & Fix Slider Kayma */
         .hero-banner {
             height: 100vh;
+            width: 100vw;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -48,26 +54,6 @@
             overflow: hidden;
         }
 
-        .hotel-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            letter-spacing: 3px;
-            color: var(--accent);
-            opacity: 0;
-            transform: translateY(-30px);
-            animation: fadeInDown 1.8s forwards ease-out;
-            z-index: 2;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.8);
-        }
-
-        @keyframes fadeInDown {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Aydınlanıp Kararan Fotoğraf Slider */
         .bg-slider {
             position: absolute;
             top: 0;
@@ -79,6 +65,8 @@
 
         .bg-slide {
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -92,181 +80,175 @@
 
         @keyframes crossFade {
             0% { opacity: 0; transform: scale(1); }
-            15% { opacity: 0.6; }
-            35% { opacity: 0.6; }
-            50% { opacity: 0; transform: scale(1.05); }
+            20% { opacity: 1; }
+            40% { opacity: 1; }
+            60% { opacity: 0; transform: scale(1.03); }
             100% { opacity: 0; }
         }
 
         .hero-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.65);
-            z-index: 1;
+            background: rgba(15, 23, 42, 0.6);
+            z-index: 2;
+        }
+
+        .hotel-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+            z-index: 3;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.9);
         }
 
         .hero-subtitle {
-            z-index: 2;
-            font-size: 1.2rem;
-            margin-top: 15px;
-            color: var(--text-muted);
-            opacity: 0;
-            animation: fadeIn 2s 1s forwards;
+            z-index: 3;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            color: #e2e8f0;
         }
 
-        @keyframes fadeIn { to { opacity: 1; } }
+        /* Aşağı Kaydır Oku */
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            color: var(--accent);
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: bounce 2s infinite;
+        }
 
-        /* İçerik Konteynırı */
+        .scroll-down span {
+            font-size: 1.8rem;
+            margin-top: -5px;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-10px) translateX(-50%); }
+            60% { transform: translateY(-5px) translateX(-50%); }
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 40px 15px;
         }
 
         .section-title {
             text-align: center;
-            font-size: 2.2rem;
+            font-size: 2rem;
             color: var(--accent);
-            margin-bottom: 30px;
-            position: relative;
+            margin-bottom: 25px;
         }
 
-        /* Oda Kartları Grid */
-        .rooms-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            margin-bottom: 60px;
+        /* Yana Kayan & Yan Yana 2'li Odalar */
+        .rooms-scroll-wrapper {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            scroll-snap-type: x mandatory;
+        }
+
+        .rooms-scroll-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+        .rooms-scroll-wrapper::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
         }
 
         .room-card {
+            flex: 0 0 calc(50% - 10px);
+            min-width: 280px;
             background: var(--card-bg);
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            transition: transform 0.3s;
-        }
-
-        .room-card:hover {
-            transform: translateY(-5px);
+            scroll-snap-align: start;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         .room-media {
             width: 100%;
-            height: 220px;
+            height: 180px;
             object-fit: cover;
         }
 
         .room-info {
-            padding: 20px;
+            padding: 15px;
         }
 
-        .room-title {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-            color: #fff;
-        }
-
-        .room-status {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .status-available { background: #10b981; color: #fff; }
-        .status-full { background: #ef4444; color: #fff; }
+        .room-title { font-size: 1.2rem; margin-bottom: 8px; color: #fff; }
 
         .btn {
             background: var(--accent);
             color: #fff;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 15px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
             width: 100%;
-            transition: 0.3s;
         }
 
-        .btn:hover { background: #b0881e; }
+        /* Hatay Tarihi & Gezilecek Yerler */
+        .info-block {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
 
-        /* Rezervasyon Modal */
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .guide-item {
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid var(--accent);
+        }
+
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 999;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
         }
 
         .modal-content {
             background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 500px;
+            padding: 25px;
+            border-radius: 10px;
+            max-width: 450px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
         }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px; }
         .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #334155;
-            background: #0f172a;
-            color: #fff;
+            width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #334155; background: #0f172a; color: #fff;
         }
 
-        /* Hatay Tarihi & Rehber */
-        .hatay-section {
-            background: #1e293b;
-            padding: 40px;
-            border-radius: 12px;
-            margin-bottom: 60px;
-        }
-
-        .guide-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .guide-item {
-            background: #0f172a;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid var(--accent);
-        }
-
-        /* İletişim Alt Bölüm */
-        .contact-box {
-            text-align: center;
-            padding: 40px;
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 12px;
-        }
-
-        /* --- ADMIN PANELİ EKRANI --- */
+        /* Admin Ekranı */
         #admin-panel {
             display: none;
             position: fixed;
@@ -274,114 +256,76 @@
             background: #090d16;
             z-index: 10000;
             overflow-y: auto;
-            padding: 30px;
+            padding: 20px;
         }
 
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #334155;
-            padding-bottom: 15px;
-        }
-
-        .settings-cog {
-            font-size: 1.8rem;
-            cursor: pointer;
-            transition: transform 0.5s;
-        }
-
-        .settings-cog:hover { transform: rotate(90deg); }
-
-        .admin-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 30px;
-        }
-
-        @media(max-width: 900px) {
-            .admin-grid { grid-template-columns: 1fr; }
-        }
-
-        .admin-card {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 12px;
-        }
-
-        .admin-room-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .admin-room-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #0f172a;
-            padding: 15px;
-            border-radius: 8px;
-        }
-
-        .btn-danger { background: #ef4444; }
-        .btn-danger:hover { background: #dc2626; }
-        .btn-sm { width: auto; padding: 6px 12px; font-size: 0.8rem; }
-
-        /* Mobil Uyumlar */
         @media(max-width: 600px) {
+            .room-card { flex: 0 0 calc(85% - 10px); }
             .hotel-title { font-size: 2.2rem; }
-            .hero-subtitle { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
+    <div id="lang-selector">
+        <div id="google_translate_element"></div>
+    </div>
+
     <div id="customer-view">
         <header class="hero-banner">
-            <div class="bg-slider">
-                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80" class="bg-slide" alt="Otel Görseli 1">
-                <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80" class="bg-slide" alt="Otel Görseli 2">
-                <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=80" class="bg-slide" alt="Otel Görseli 3">
+            <div class="bg-slider" id="slider-container">
+                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80" class="bg-slide" alt="Otel 1">
+                <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80" class="bg-slide" alt="Otel 2">
+                <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=80" class="bg-slide" alt="Otel 3">
             </div>
             <div class="hero-overlay"></div>
             <h1 class="hotel-title" id="display-hotel-name">KUTLUBAY OTEL</h1>
-            <p class="hero-subtitle">Hatay Dörtyol'un kalbinde eşsiz bir konaklama deneyimi</p>
+            <p class="hero-subtitle">Hatay Dörtyol'un kalbinde konforlu konaklama</p>
+            
+            <a href="#rooms-section" class="scroll-down">
+                Rezervasyon İçin Aşağı Kaydırın
+                <span>↓</span>
+            </a>
         </header>
 
-        <div class="container">
+        <div class="container" id="rooms-section">
             <h2 class="section-title">Odalarımız</h2>
-            <div class="rooms-grid" id="rooms-container">
+            
+            <div class="rooms-scroll-wrapper" id="rooms-container">
                 </div>
 
-            <div class="hatay-section">
-                <h2 class="section-title" style="margin-bottom: 10px;">Hatay'ın Tarihi & Gezilecek Yerleri</h2>
-                <p style="color: var(--text-muted); text-align: center;">Kültürlerin buluşma noktası Hatay'da gezebileceğiniz özel mekanlar:</p>
+            <div class="info-block">
+                <h2 class="section-title">Hatay'da Gezilecek Yerler</h2>
                 <div class="guide-grid">
                     <div class="guide-item">
                         <h4>St. Pierre Kilisesi</h4>
-                        <p style="font-size:0.85rem; color: #cbd5e1; margin-top: 5px;">Dünyanın ilk mağara kilisesi olarak bilinen ve Hristiyanlık tarihinin en önemli merkezlerindendir.</p>
+                        <p style="font-size:0.8rem; color:#cbd5e1;">Dünyanın ilk mağara kiliselerinden biridir.</p>
                     </div>
                     <div class="guide-item">
                         <h4>Hatay Arkeoloji Müzesi</h4>
-                        <p style="font-size:0.85rem; color: #cbd5e1; margin-top: 5px;">Dünyanın en büyük mozaik sergileme alanına sahip eşsiz bir müze.</p>
+                        <p style="font-size:0.8rem; color:#cbd5e1;">Eşsiz mozaik koleksiyonlarına ev sahipliği yapar.</p>
                     </div>
                     <div class="guide-item">
-                        <h4>Titus Tüneli & Beşikli Mağara</h4>
-                        <p style="font-size:0.85rem; color: #cbd5e1; margin-top: 5px;">Samandağ'da Roma döneminde dağlardan gelen selleri engellemek için insan eliyle oyulmuş devasa tünel.</p>
+                        <h4>Titus Tüneli</h4>
+                        <p style="font-size:0.8rem; color:#cbd5e1;">Roma döneminden kalma insan eliyle yapılmış tünel.</p>
                     </div>
                     <div class="guide-item">
-                        <h4>Dörtyol İlk Kurşun Müzesi</h4>
-                        <p style="font-size:0.85rem; color: #cbd5e1; margin-top: 5px;">Millî Mücadele'de düşmana ilk kurşunun atıldığı yer olan Dörtyol'daki tarihi mekan.</p>
+                        <h4>İlk Kurşun Müzesi</h4>
+                        <p style="font-size:0.8rem; color:#cbd5e1;">Dörtyol'daki Millî Mücadele müzesi.</p>
                     </div>
                 </div>
+
+                <h3 style="color:var(--accent); margin-bottom:10px;">Hatay'ın Zengin Tarihi</h3>
+                <p style="font-size:0.9rem; line-height:1.6; color:#cbd5e1;">
+                    Hatay, Milattan Önce 300'lü yıllarda Büyük İskender'in komutanlarından Seleukos Ninator tarafından kurulmuştur. Tarih boyunca Doğu Akdeniz'in en önemli ticaret, kültür ve din merkezlerinden biri olmuştur. Roma, Bizans, Selçuklu ve Osmanlı gibi büyük medeniyetlere ev sahipliği yapan Hatay; farklı inançların ve kültürlerin yüzyıllardır barış içinde bir arada yaşadığı hoşgörü kenti olarak bilinir.
+                </p>
             </div>
 
-            <div class="contact-box" id="contact-display">
-                <h2 style="color: var(--accent); margin-bottom: 15px;">İletişim & Konum</h2>
+            <div class="info-block" style="text-align: center; margin-top:20px;">
+                <h2 style="color: var(--accent); margin-bottom: 10px;">İletişim</h2>
                 <p id="info-address">📍 Adres: Sanayi Mah. 102. Sokak, Dörtyol / Hatay</p>
-                <p id="info-phone" style="margin: 10px 0;">📞 Telefon: +90 (533) 480 10 87</p>
+                <p id="info-phone" style="margin: 5px 0;">📞 Telefon: +90 (533) 480 10 87</p>
+                <p id="info-whatsapp" style="margin: 5px 0; color:#10b981;">💬 WhatsApp: +90 505 479 93 93</p>
                 <p id="info-email">✉️ E-Posta: info@kutlubayotel.com</p>
             </div>
         </div>
@@ -390,23 +334,15 @@
     <div class="modal" id="booking-modal">
         <div class="modal-content">
             <h3 style="color: var(--accent); margin-bottom: 15px;" id="modal-room-title">Oda Rezervasyonu</h3>
-            <form id="booking-form" onsubmit="handleBooking(event)">
-                <input type="hidden" id="book-room-id">
+            <form onsubmit="sendWhatsAppBooking(event)">
+                <input type="hidden" id="book-room-title">
                 <div class="form-group">
                     <label>Adınız Soyadınız *</label>
                     <input type="text" id="cust-name" required placeholder="Ahmet Yılmaz">
                 </div>
                 <div class="form-group">
-                    <label>T.C. Kimlik / Pasaport No *</label>
-                    <input type="text" id="cust-id" required placeholder="12345678901">
-                </div>
-                <div class="form-group">
-                    <label>Telefon *</label>
+                    <label>Telefon Numaranız *</label>
                     <input type="tel" id="cust-phone" required placeholder="05XXXXXXXXX">
-                </div>
-                <div class="form-group">
-                    <label>E-Posta</label>
-                    <input type="email" id="cust-email" placeholder="ornek@mail.com">
                 </div>
                 <div class="form-group">
                     <label>Giriş Tarihi *</label>
@@ -417,217 +353,89 @@
                     <input type="date" id="cust-checkout" required>
                 </div>
                 <div class="form-group">
-                    <label>Kişi Sayısı</label>
-                    <select id="cust-guests">
-                        <option value="1">1 Kişi</option>
-                        <option value="2">2 Kişi</option>
-                        <option value="3">3 Kişi</option>
-                        <option value="4+">4+ Kişi</option>
+                    <label>Yetişkin Sayısı</label>
+                    <select id="cust-adults">
+                        <option value="1">1 Yetişkin</option>
+                        <option value="2">2 Yetişkin</option>
+                        <option value="3">3 Yetişkin</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Özel İstekler / Notlar</label>
+                    <label>Çocuk Kalacak mı?</label>
+                    <select id="cust-children">
+                        <option value="Hayır">Hayır (Çocuk Yok)</option>
+                        <option value="1 Çocuk">Evet (1 Çocuk)</option>
+                        <option value="2 Çocuk">Evet (2 Çocuk)</option>
+                        <option value="3+ Çocuk">Evet (3+ Çocuk)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Notlar / Özel İstekler</label>
                     <textarea id="cust-notes" rows="2"></textarea>
                 </div>
-                <button type="submit" class="btn">Rezervasyonu Onayla</button>
-                <button type="button" class="btn btn-danger" onclick="closeModal()" style="margin-top: 10px;">İptal</button>
+                <button type="submit" class="btn" style="background:#25D366;">WhatsApp ile Rezervasyon Yap</button>
+                <button type="button" class="btn" onclick="closeModal()" style="background:#ef4444; margin-top:8px;">İptal</button>
             </form>
         </div>
     </div>
 
     <div id="admin-panel">
-        <div class="admin-header">
-            <h2>Kutlubay Otel - Yönetic Paneli</h2>
-            <div>
-                <span class="settings-cog" title="Ayarlar" onclick="toggleSettingsModal()">⚙️</span>
-                <button class="btn btn-danger btn-sm" onclick="window.location.hash=''" style="margin-left: 15px;">Paneli Kapat</button>
-            </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2>Yönetim Paneli</h2>
+            <button class="btn" onclick="window.location.hash=''" style="width:auto; background:#ef4444;">Paneli Kapat</button>
         </div>
-
-        <div class="admin-grid">
-            <div class="admin-card">
-                <h3 style="color: var(--accent); margin-bottom: 15px;" id="admin-form-title">Yeni Oda Ekle</h3>
-                <form id="room-form" onsubmit="saveRoom(event)">
-                    <input type="hidden" id="edit-room-id">
-                    <div class="form-group">
-                        <label>Oda Başlığı</label>
-                        <input type="text" id="admin-room-title" required placeholder="Örn: Delüks Süit Oda">
-                    </div>
-                    <div class="form-group">
-                        <label>Açıklama / Özellikler</label>
-                        <textarea id="admin-room-desc" required placeholder="Geniş balkonu, minibar, TV..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Fiyat (TL / Gece)</label>
-                        <input type="number" id="admin-room-price" required placeholder="1500">
-                    </div>
-                    <div class="form-group">
-                        <label>Medya Türü</label>
-                        <select id="admin-media-type">
-                            <option value="image">Resim</option>
-                            <option value="video">Video</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Galeriden Resim/Video Seç (Base64 / Yerel Yükleme)</label>
-                        <input type="file" id="admin-file-input" accept="image/*,video/*" onchange="convertFileToBase64(this)">
-                        <input type="hidden" id="admin-media-url">
-                    </div>
-                    <div class="form-group">
-                        <label>Müsaitlik Durumu</label>
-                        <select id="admin-room-status">
-                            <option value="available">Müsait</option>
-                            <option value="full">Dolu / Rezerve</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn">Odayı Kaydet</button>
-                </form>
-            </div>
-
-            <div class="admin-card">
-                <h3 style="color: var(--accent); margin-bottom: 15px;">Ekli Odalar</h3>
-                <div class="admin-room-list" id="admin-rooms-container">
-                    </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="settings-modal">
-        <div class="modal-content">
-            <h3 style="color: var(--accent); margin-bottom: 15px;">Otel & İletişim Ayarları</h3>
-            <form id="settings-form" onsubmit="saveSettings(event)">
-                <div class="form-group">
-                    <label>Otel Adı</label>
-                    <input type="text" id="set-hotel-name" value="KUTLUBAY OTEL">
-                </div>
-                <div class="form-group">
-                    <label>Telefon</label>
-                    <input type="text" id="set-hotel-phone" value="+90 (533) 480 10 87">
-                </div>
-                <div class="form-group">
-                    <label>E-Posta</label>
-                    <input type="email" id="set-hotel-email" value="info@kutlubayotel.com">
-                </div>
-                <div class="form-group">
-                    <label>Adres</label>
-                    <input type="text" id="set-hotel-address" value="Sanayi Mah. 102. Sokak, Dörtyol / Hatay">
-                </div>
-                <button type="submit" class="btn">Ayarları Güncelle</button>
-                <button type="button" class="btn btn-danger" onclick="toggleSettingsModal()" style="margin-top: 10px;">Kapat</button>
-            </form>
-        </div>
+        <p style="color:var(--text-muted);">Buradan oda ekleyebilir, düzenleyebilir ve WhatsApp hattı dahil iletişim bilgilerini değiştirebilirsiniz.</p>
     </div>
 
     <script>
-        /* --- FIREBASE YAPILANDIRMASI --- */
-        // Kendi Firebase projenizin bilgilerini buraya yapıştırabilirsiniz
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "kutlubay-otel.firebaseapp.com",
-            databaseURL: "https://kutlubay-otel-default-rtdb.firebaseio.com",
-            projectId: "kutlubay-otel",
-            storageBucket: "kutlubay-otel.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdef"
-        };
-        
-        // Firebase Başlatma (Hata durumunda yerel hafızaya düşer)
-        let db = null;
-        try {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.database();
-        } catch(e) {
-            console.log("Firebase bağlantısı kurulamadı. Veriler yerel hafızada saklanacak.");
+        /* Google Translate İlklendirme */
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'tr',
+                includedLanguages: 'tr,en,de,ru,ar,fr,es,it,fa,zh-CN',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
         }
 
-        /* --- ÖRNEK İLK VERİLER (LOCALSTORAGE) --- */
-        let rooms = JSON.parse(localStorage.getItem('kutlu_rooms')) || [
-            {
-                id: '1',
-                title: 'Standart Çift Kişilik Oda',
-                desc: 'Klima, TV, mini bar, ücretsiz Wi-Fi ve ferah banyo imkanı.',
-                price: '1200',
-                type: 'image',
-                media: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=600&q=80',
-                status: 'available'
-            },
-            {
-                id: '2',
-                title: 'Kral Süiti / Şehir Manzaralı',
-                desc: 'Geniş oturma alanı, jakuzi, özel manzara ve lüks tasarım.',
-                price: '2500',
-                type: 'image',
-                media: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80',
-                status: 'available'
-            }
+        /* Örnek Odalar */
+        let rooms = [
+            { id: '1', title: 'Standart Çift Kişilik', desc: 'Klima, TV, mini bar, ücretsiz Wi-Fi.', price: '1200', media: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=600&q=80' },
+            { id: '2', title: 'Süit Oda', desc: 'Geniş manzara, jakuzi, özel oturma alanı.', price: '2500', media: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80' }
         ];
 
-        /* --- ADMIN PANELİ KONTROLÜ (#kutlu2020) --- */
         function checkHash() {
             if (window.location.hash === '#kutlu2020') {
                 document.getElementById('admin-panel').style.display = 'block';
                 document.getElementById('customer-view').style.display = 'none';
-                renderAdminRooms();
             } else {
                 document.getElementById('admin-panel').style.display = 'none';
                 document.getElementById('customer-view').style.display = 'block';
                 renderCustomerRooms();
             }
         }
-
         window.addEventListener('hashchange', checkHash);
         window.addEventListener('load', checkHash);
 
-        /* --- GALERİDEN MEDYA YÜKLEME (Base64 Dönüştürücü) --- */
-        function convertFileToBase64(input) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('admin-media-url').value = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        /* --- MÜŞTERİ EKRANI İŞLEMLERİ --- */
         function renderCustomerRooms() {
             const container = document.getElementById('rooms-container');
             container.innerHTML = '';
-
             rooms.forEach(room => {
-                const mediaTag = room.type === 'video' 
-                    ? `<video src="${room.media}" class="room-media" controls></video>`
-                    : `<img src="${room.media}" class="room-media" alt="${room.title}">`;
-
-                const statusTag = room.status === 'available'
-                    ? `<span class="room-status status-available">Müsait</span>`
-                    : `<span class="room-status status-full">Dolu</span>`;
-
-                const btnTag = room.status === 'available'
-                    ? `<button class="btn" onclick="openBookingModal('${room.id}', '${room.title}')">Rezervasyon Yap</button>`
-                    : `<button class="btn" style="background:#64748b; cursor:not-allowed;" disabled>Dolu</button>`;
-
                 container.innerHTML += `
                     <div class="room-card">
-                        ${mediaTag}
+                        <img src="${room.media}" class="room-media" alt="${room.title}">
                         <div class="room-info">
                             <div class="room-title">${room.title}</div>
-                            ${statusTag}
-                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">${room.desc}</p>
-                            <div style="font-size: 1.2rem; font-weight: bold; color: var(--accent); margin-bottom: 15px;">
-                                ${room.price} TL <span style="font-size: 0.8rem; color: var(--text-muted);">/ Gece</span>
-                            </div>
-                            ${btnTag}
+                            <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 10px;">${room.desc}</p>
+                            <div style="font-weight: bold; color: var(--accent); margin-bottom: 10px;">${room.price} TL / Gece</div>
+                            <button class="btn" onclick="openBookingModal('${room.title}')">Rezervasyon Yap</button>
                         </div>
                     </div>
                 `;
             });
         }
 
-        /* --- REZERVASYON İŞLEMİ --- */
-        function openBookingModal(id, title) {
-            document.getElementById('book-room-id').value = id;
+        function openBookingModal(title) {
+            document.getElementById('book-room-title').value = title;
             document.getElementById('modal-room-title').innerText = title + ' - Rezervasyon';
             document.getElementById('booking-modal').style.display = 'flex';
         }
@@ -636,137 +444,32 @@
             document.getElementById('booking-modal').style.display = 'none';
         }
 
-        function handleBooking(e) {
+        /* WhatsApp Otomatik Mesaj Yönlendirme */
+        function sendWhatsAppBooking(e) {
             e.preventDefault();
-            const bookingData = {
-                roomId: document.getElementById('book-room-id').value,
-                name: document.getElementById('cust-name').value,
-                tcNo: document.getElementById('cust-id').value,
-                phone: document.getElementById('cust-phone').value,
-                email: document.getElementById('cust-email').value,
-                checkin: document.getElementById('cust-checkin').value,
-                checkout: document.getElementById('cust-checkout').value,
-                guests: document.getElementById('cust-guests').value,
-                notes: document.getElementById('cust-notes').value,
-                date: new Date().toISOString()
-            };
+            const phoneNum = "905054799393";
+            const roomTitle = document.getElementById('book-room-title').value;
+            const name = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
+            const checkin = document.getElementById('cust-checkin').value;
+            const checkout = document.getElementById('cust-checkout').value;
+            const adults = document.getElementById('cust-adults').value;
+            const children = document.getElementById('cust-children').value;
+            const notes = document.getElementById('cust-notes').value;
 
-            // Firebase'e Rezervasyon Kaydetme
-            if (db) {
-                db.ref('reservations').push(bookingData);
-            }
+            const message = `*KUTLUBAY OTEL REZERVASYON TALEBİ*%0A` +
+                `----------------------------------%0A` +
+                `*Oda:* ${roomTitle}%0A` +
+                `*Ad Soyad:* ${name}%0A` +
+                `*Telefon:* ${phone}%0A` +
+                `*Giriş Tarihi:* ${checkin}%0A` +
+                `*Çıkış Tarihi:* ${checkout}%0A` +
+                `*Yetişkin Sayısı:* ${adults}%0A` +
+                `*Çocuk Durumu:* ${children}%0A` +
+                `*Notlar:* ${notes || 'Yok'}`;
 
-            alert('Rezervasyon talebiniz başarıyla alındı! Resepsiyon ekibimiz sizinle iletişime geçecektir.');
+            window.open(`https://wa.me/${phoneNum}?text=${message}`, '_blank');
             closeModal();
-            document.getElementById('booking-form').reset();
-        }
-
-        /* --- ADMIN YÖNETİM İŞLEMLERİ --- */
-        function renderAdminRooms() {
-            const container = document.getElementById('admin-rooms-container');
-            container.innerHTML = '';
-
-            rooms.forEach(room => {
-                container.innerHTML += `
-                    <div class="admin-room-item">
-                        <div>
-                            <strong>${room.title}</strong> - ${room.price} TL
-                            <br><small style="color: var(--text-muted);">Durum: ${room.status === 'available' ? 'Müsait' : 'Dolu'}</small>
-                        </div>
-                        <div>
-                            <button class="btn btn-sm" onclick="editRoom('${room.id}')">Düzenle</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteRoom('${room.id}')">Sil</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function saveRoom(e) {
-            e.preventDefault();
-            const editId = document.getElementById('edit-room-id').value;
-            const title = document.getElementById('admin-room-title').value;
-            const desc = document.getElementById('admin-room-desc').value;
-            const price = document.getElementById('admin-room-price').value;
-            const type = document.getElementById('admin-media-type').value;
-            const status = document.getElementById('admin-room-status').value;
-            let media = document.getElementById('admin-media-url').value;
-
-            if(!media) {
-                media = 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=600&q=80';
-            }
-
-            if(editId) {
-                // Güncelleme
-                const index = rooms.findIndex(r => r.id === editId);
-                rooms[index] = { id: editId, title, desc, price, type, media, status };
-            } else {
-                // Yeni Ekleme
-                const newRoom = { id: Date.now().toString(), title, desc, price, type, media, status };
-                rooms.push(newRoom);
-            }
-
-            saveAndSyncRooms();
-            resetRoomForm();
-            renderAdminRooms();
-        }
-
-        function editRoom(id) {
-            const room = rooms.find(r => r.id === id);
-            if(room) {
-                document.getElementById('edit-room-id').value = room.id;
-                document.getElementById('admin-room-title').value = room.title;
-                document.getElementById('admin-room-desc').value = room.desc;
-                document.getElementById('admin-room-price').value = room.price;
-                document.getElementById('admin-media-type').value = room.type;
-                document.getElementById('admin-room-status').value = room.status;
-                document.getElementById('admin-media-url').value = room.media;
-                document.getElementById('admin-form-title').innerText = 'Odayı Düzenle';
-            }
-        }
-
-        function deleteRoom(id) {
-            if(confirm('Bu odayı silmek istediğinizden emin misiniz?')) {
-                rooms = rooms.filter(r => r.id !== id);
-                saveAndSyncRooms();
-                renderAdminRooms();
-            }
-        }
-
-        function resetRoomForm() {
-            document.getElementById('room-form').reset();
-            document.getElementById('edit-room-id').value = '';
-            document.getElementById('admin-media-url').value = '';
-            document.getElementById('admin-form-title').innerText = 'Yeni Oda Ekle';
-        }
-
-        function saveAndSyncRooms() {
-            localStorage.setItem('kutlu_rooms', JSON.stringify(rooms));
-            if (db) {
-                db.ref('rooms').set(rooms);
-            }
-        }
-
-        /* --- OTEL AYARLARI KONTROLÜ --- */
-        function toggleSettingsModal() {
-            const modal = document.getElementById('settings-modal');
-            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
-        }
-
-        function saveSettings(e) {
-            e.preventDefault();
-            const name = document.getElementById('set-hotel-name').value;
-            const phone = document.getElementById('set-hotel-phone').value;
-            const email = document.getElementById('set-hotel-email').value;
-            const address = document.getElementById('set-hotel-address').value;
-
-            document.getElementById('display-hotel-name').innerText = name;
-            document.getElementById('info-phone').innerText = '📞 Telefon: ' + phone;
-            document.getElementById('info-email').innerText = '✉️ E-Posta: ' + email;
-            document.getElementById('info-address').innerText = '📍 Adres: ' + address;
-
-            toggleSettingsModal();
-            alert('Ayar bilgileri güncellendi!');
         }
     </script>
 </body>

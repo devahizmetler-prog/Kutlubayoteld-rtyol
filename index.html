@@ -190,9 +190,36 @@
 
         .info-block {
             background: var(--card-bg);
-            padding: 20px;
+            padding: 25px;
             border-radius: 10px;
             margin-top: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .history-card {
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .history-card h3 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .history-card p {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
         .contact-list {
@@ -338,6 +365,7 @@
             .hotel-title { font-size: 1.8rem; }
             .hero-subtitle { font-size: 0.85rem; }
             .admin-grid { grid-template-columns: 1fr; }
+            .history-grid { grid-template-columns: 1fr; }
             .room-card { flex: 0 0 calc(85% - 10px); }
         }
     </style>
@@ -364,6 +392,24 @@
         <div class="container" id="rooms-section">
             <h2 class="section-title">Odalarımız</h2>
             <div class="rooms-scroll-wrapper" id="rooms-container"></div>
+
+            <div class="info-block">
+                <h2 class="section-title">Tarihin ve Kültürün Buluşma Noktası: Hatay</h2>
+                <div class="history-grid">
+                    <div class="history-card">
+                        <h3>🏛️ Geçmişteki Hatay (Antik Dönem & Medeniyetler)</h3>
+                        <p>
+                            Hatay, insanlık tarihinin en eski yerleşim merkezlerinden biridir. İlk Çağlardan itibaren Seleukoslar, Roma ve Bizans İmparatorluklarına ev sahipliği yapmış, Roma döneminde dünyanın en büyük 3. kenti konumuna yükselmiştir. İlk Hristiyanlık isminin kullanıldığı St. Pierre Kilisesi, devasa mozaikleri ve tarihi İpek Yolu üzerindeki jeopolitik konumuyla Hatay, yüzyıllar boyunca medeniyetlerin ve kültürlerin kesişim noktası olmuştur. Aynı zamanda Kurtuluş Savaşı'nda Milli Mücadele'nin ilk kurşununun atıldığı Dörtyol, bu köklü tarihin en gururlu tanıklarındandır.
+                        </p>
+                    </div>
+                    <div class="history-card">
+                        <h3>✨ Günümüzdeki Hatay (Hoşgörü & Gastronomi)</h3>
+                        <p>
+                            Bugün Hatay, farklı din, dil ve kültürlerin binlerce yıldır bir arada kardeşçe yaşadığı dünyaca ünlü bir "Hoşgörü Şehri"dir. UNESCO tarafından Gastronomi Şehri olarak tescillenen kentimiz; eşsiz künefesi, tepsi kebabı ve zengin mutfağıyla lezzet tutkunlarını ağırlamaktadır. Doğal güzellikleri, tarihi sokakları, sıcakkanlı insanları ve Dörtyol'un Doğu Akdeniz'e açılan stratejik konumu ile Hatay, günümüzde hem ticari hem de turistik açıdan cazibesini koruyan eşsiz bir Doğu Akdeniz incisidir.
+                        </p>
+                    </div>
+                </div>
+            </div>
 
             <div class="info-block" style="text-align: center; margin-top:30px;">
                 <h2 style="color: var(--accent); margin-bottom: 10px;">İletişim & Konum</h2>

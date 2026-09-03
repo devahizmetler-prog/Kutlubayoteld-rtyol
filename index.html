@@ -1,12 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kutlubay Otel | Dörtyol Hatay</title>
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <!-- Google Translate API -->
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <style>
         :root {
@@ -307,9 +308,13 @@
             <div class="rooms-scroll-wrapper" id="rooms-container"></div>
 
             <div class="info-block">
-                <h2 class="section-title">Genel Bilgiler</h2>
+                <h2 class="section-title">Genel Bilgiler & Otel Kuralları</h2>
                 <div class="info-grid">
                     <div class="info-card">
+                        <h4 style="color:var(--accent); margin-bottom:8px;">🕒 Giriş & Çıkış Saatleri</h4>
+                        <p style="font-size:0.85rem; color:#cbd5e1;">Giriş Saati (Check-in): <strong>14:00</strong> ve sonrası</p>
+                        <p style="font-size:0.85rem; color:#cbd5e1; margin-top:4px;">Çıkış Saati (Check-out): En geç <strong>12:00</strong></p>
+                    </div>
                     <div class="info-card">
                         <h4 style="color:var(--accent); margin-bottom:8px;">📍 Ulaşım ve Mesafeler</h4>
                         <p style="font-size:0.85rem; color:#cbd5e1;">Dörtyol Otogar: <strong>5 dk</strong></p>
@@ -392,6 +397,7 @@
                         <option value="Hayır">Hayır (Çocuk Yok)</option>
                         <option value="1 Çocuk">Evet (1 Çocuk)</option>
                         <option value="2 Çocuk">Evet (2 Çocuk)</option>
+                        <option value="3 Çocuk">Evet (3 & fazlası Çocuk)</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -407,7 +413,7 @@
     <div id="admin-panel">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #334155; padding-bottom:15px;">
             <h2 style="color:var(--accent);">Kutlubay Otel - Yönetim Paneli</h2>
-            <button class="btn" onclick="window.location.hash=''" style="width:auto; background:#ef4444; padding:6px 15px;">Paneli Kapat</button>
+            <button class="btn" onclick="closeAdminPanel()" style="width:auto; background:#ef4444; padding:6px 15px;">Paneli Kapat</button>
         </div>
 
         <div style="background:var(--card-bg); padding:20px; border-radius:10px; margin-top:20px;">
@@ -521,7 +527,7 @@
             firebase.initializeApp(firebaseConfig);
             db = firebase.database();
         } catch(e) {
-            console.error("Firebase ilklendirme hatası:", e);
+            console.error("Firebase hatasi:", e);
         }
 
         let heroMediaList = [
@@ -542,7 +548,7 @@
                 if (data) {
                     heroMediaList = Array.isArray(data) ? data : Object.values(data);
                     renderHeroSlider();
-                    if (window.location.hash === '#kutlu2020') renderAdminHeroList();
+                    if (document.getElementById('admin-panel').style.display === 'block') renderAdminHeroList();
                 }
             });
 
@@ -551,13 +557,14 @@
                 if (data) {
                     rooms = Array.isArray(data) ? data : Object.values(data);
                     renderCustomerRooms();
-                    if (window.location.hash === '#kutlu2020') renderAdminRooms();
+                    if (document.getElementById('admin-panel').style.display === 'block') renderAdminRooms();
                 }
             });
         }
 
         function checkHash() {
-            if (window.location.hash === '#kutlu2020') {
+            const hash = window.location.hash;
+            if (hash === '#kutlu2020') {
                 const password = prompt("Lütfen Admin Panel Şifresini Giriniz:");
                 if (password === "353120") {
                     document.getElementById('admin-panel').style.display = 'block';
@@ -565,18 +572,29 @@
                     renderAdminRooms();
                     renderAdminHeroList();
                 } else {
-                    alert("Hatalı Şifre! Giriş engellendi.");
-                    window.location.hash = '';
+                    alert("Hatalı Şifre!");
+                    history.replaceState(null, null, ' ');
+                    showCustomerView();
                 }
             } else {
-                document.getElementById('admin-panel').style.display = 'none';
-                document.getElementById('customer-view').style.display = 'block';
-                renderCustomerRooms();
-                renderHeroSlider();
+                showCustomerView();
             }
         }
+
+        function closeAdminPanel() {
+            history.replaceState(null, null, ' ');
+            showCustomerView();
+        }
+
+        function showCustomerView() {
+            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('customer-view').style.display = 'block';
+            renderCustomerRooms();
+            renderHeroSlider();
+        }
+
         window.addEventListener('hashchange', checkHash);
-        window.addEventListener('load', checkHash);
+        document.addEventListener('DOMContentLoaded', checkHash);
 
         async function uploadToImgBB(file) {
             const formData = new FormData();
@@ -630,6 +648,7 @@
 
         function renderHeroSlider() {
             const container = document.getElementById('hero-slider-container');
+            if (!container) return;
             container.innerHTML = '';
             if (heroMediaList.length === 0) return;
 
@@ -683,6 +702,7 @@
 
         function renderAdminHeroList() {
             const container = document.getElementById('admin-hero-list');
+            if(!container) return;
             container.innerHTML = '';
             heroMediaList.forEach((item, index) => {
                 container.innerHTML += `
@@ -696,6 +716,7 @@
 
         function renderCustomerRooms() {
             const container = document.getElementById('rooms-container');
+            if(!container) return;
             container.innerHTML = '';
             rooms.forEach(room => {
                 const mediaTag = room.type === 'video' 
@@ -762,6 +783,7 @@
 
         function renderAdminRooms() {
             const container = document.getElementById('admin-rooms-container');
+            if(!container) return;
             container.innerHTML = '';
             rooms.forEach(room => {
                 container.innerHTML += `
@@ -825,5 +847,3 @@
     </script>
 </body>
 </html>
-
-```

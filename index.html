@@ -42,9 +42,10 @@
             border: 1px solid var(--accent);
         }
 
-        /* Hero Banner & Dinamik Slider */
+        /* Hero Banner (Mobil Uyumlu & Dengeli Küçültülmüş) */
         .hero-banner {
-            height: 100vh;
+            height: 80vh; /* Ekranı aşırı doldurmaması için 100vh yerine 80vh yapıldı */
+            min-height: 480px;
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -52,7 +53,7 @@
             align-items: center;
             position: relative;
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             overflow: hidden;
         }
 
@@ -63,11 +64,13 @@
             z-index: 1;
         }
 
+        /* Görsel/Video Kırpma & Oturtma Kuralları */
         .bg-slide-media {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* Resmi basıklaştırmadan alanı doldurarak kırpar */
+            object-position: center; /* Kırpılan resmin tam merkezini odaklar */
             opacity: 0;
             transition: opacity 1s ease-in-out;
         }
@@ -79,34 +82,36 @@
         .hero-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.65);
+            background: rgba(15, 23, 42, 0.6);
             z-index: 2;
         }
 
         .hotel-title {
-            font-size: 3rem;
+            font-size: 2.5rem; /* Mobilde taşmaması için küçültüldü */
             font-weight: 800;
             color: var(--accent);
             z-index: 3;
             text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+            letter-spacing: 1px;
         }
 
         .hero-subtitle {
             z-index: 3;
-            font-size: 1.1rem;
-            margin-top: 10px;
+            font-size: 0.95rem;
+            margin-top: 8px;
             color: #e2e8f0;
+            max-width: 90%;
         }
 
         /* Kaydırma Yönlendirme Oku */
         .scroll-down {
             position: absolute;
-            bottom: 25px;
+            bottom: 15px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 3;
             color: var(--accent);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-decoration: none;
             display: flex;
             flex-direction: column;
@@ -114,25 +119,25 @@
             animation: bounce 2s infinite;
         }
 
-        .scroll-down span { font-size: 1.6rem; margin-top: -4px; }
+        .scroll-down span { font-size: 1.3rem; margin-top: -2px; }
 
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
-            40% { transform: translateY(-8px) translateX(-50%); }
-            60% { transform: translateY(-4px) translateX(-50%); }
+            40% { transform: translateY(-6px) translateX(-50%); }
+            60% { transform: translateY(-3px) translateX(-50%); }
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 15px;
+            padding: 30px 15px;
         }
 
         .section-title {
             text-align: center;
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--accent);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         /* Yana Kayan Odalar */
@@ -149,7 +154,7 @@
 
         .room-card {
             flex: 0 0 calc(50% - 10px);
-            min-width: 280px;
+            min-width: 260px;
             background: var(--card-bg);
             border-radius: 10px;
             overflow: hidden;
@@ -157,9 +162,14 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        .room-media { width: 100%; height: 190px; object-fit: cover; }
+        .room-media { 
+            width: 100%; 
+            height: 180px; 
+            object-fit: cover; /* Oda resimlerini de düzgün kırpar */
+        }
+        
         .room-info { padding: 15px; }
-        .room-title { font-size: 1.2rem; margin-bottom: 8px; color: #fff; font-weight: bold; }
+        .room-title { font-size: 1.1rem; margin-bottom: 8px; color: #fff; font-weight: bold; }
 
         .room-status {
             display: inline-block;
@@ -190,15 +200,15 @@
         /* Hatay Bilgileri */
         .info-block {
             background: var(--card-bg);
-            padding: 25px;
+            padding: 20px;
             border-radius: 10px;
-            margin-top: 30px;
+            margin-top: 25px;
         }
 
         .guide-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
             margin-bottom: 20px;
         }
 
@@ -223,9 +233,9 @@
 
         .modal-content {
             background: var(--card-bg);
-            padding: 25px;
+            padding: 20px;
             border-radius: 10px;
-            max-width: 450px;
+            max-width: 420px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
@@ -256,9 +266,11 @@
         }
 
         @media(max-width: 768px) {
+            .hero-banner { height: 65vh; min-height: 380px; }
+            .hotel-title { font-size: 1.8rem; }
+            .hero-subtitle { font-size: 0.85rem; }
             .admin-grid { grid-template-columns: 1fr; }
             .room-card { flex: 0 0 calc(85% - 10px); }
-            .hotel-title { font-size: 2.2rem; }
         }
     </style>
 </head>
@@ -283,7 +295,6 @@
 
         <div class="container" id="rooms-section">
             <h2 class="section-title">Odalarımız</h2>
-            
             <div class="rooms-scroll-wrapper" id="rooms-container"></div>
 
             <div class="info-block">
@@ -295,7 +306,7 @@
                     </div>
                     <div class="guide-item">
                         <h4>Hatay Arkeoloji Müzesi</h4>
-                        <p style="font-size:0.8rem; color:#cbd5e1; margin-top:4px;">Eşsiz mozaik koleksiyonlarına ev sahipliği yapar.</p>
+                        <p style="font-size:0.8rem; color:#cbd5e1; margin-top:4px;">Eşsiz mozaik koleksiyonlarına ev sahipliği yapmaktadır.</p>
                     </div>
                     <div class="guide-item">
                         <h4>Titus Tüneli</h4>
@@ -308,8 +319,8 @@
                 </div>
 
                 <h3 style="color:var(--accent); margin-bottom:10px;">Hatay'ın Zengin Tarihi</h3>
-                <p style="font-size:0.9rem; line-height:1.6; color:#cbd5e1;">
-                    Hatay, M.Ö. 300 civarında Seleukos Nicator tarafından kurulmuş olup tarih boyunca Doğu Akdeniz'in en stratejik ticaret ve kültür merkezlerinden biri olmuştur. Roma, Bizans, Selçuklu ve Osmanlı gibi köklü medeniyetlerin izlerini taşıyan Hatay; farklı din ve kültürlerin barış içinde yaşadığı küresel bir hoşgörü sembolüdür.
+                <p style="font-size:0.85rem; line-height:1.6; color:#cbd5e1;">
+                    Hatay, M.Ö. 300 civarında Seleukos Nicator tarafından kurulmuş olup tarih boyunca Doğu Akdeniz'in en stratejik ticaret ve kültür merkezlerinden biri olmuştur.
                 </p>
             </div>
 
@@ -358,7 +369,6 @@
                         <option value="Hayır">Hayır (Çocuk Yok)</option>
                         <option value="1 Çocuk">Evet (1 Çocuk)</option>
                         <option value="2 Çocuk">Evet (2 Çocuk)</option>
-                        <option value="3+ Çocuk">Evet (3+ Çocuk)</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -378,7 +388,7 @@
         </div>
 
         <div style="background:var(--card-bg); padding:20px; border-radius:10px; margin-top:20px;">
-            <h3 style="color:var(--accent); margin-bottom:12px;">🖼️ Ana Ekran Arka Plan Medyaları (Görsel & Video)</h3>
+            <h3 style="color:var(--accent); margin-bottom:12px;">🖼️ Ana Ekran Arka Plan Medyaları (Kırpma Ayarlı)</h3>
             <div style="display:grid; grid-template-columns:1fr 2fr; gap:15px;">
                 <form onsubmit="addHeroMedia(event)">
                     <div class="form-group">
@@ -389,11 +399,19 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Galeriden Dosya Seç (Base64)</label>
+                        <label>Kırpma Odak Hizalaması</label>
+                        <select id="hero-media-fit">
+                            <option value="center">Tam Ortala (Varsayılan)</option>
+                            <option value="top">Üst Kısmı Odakla</option>
+                            <option value="bottom">Alt Kısmı Odakla</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Galeriden Seç (Base64)</label>
                         <input type="file" accept="image/*,video/*" onchange="convertHeroFileToBase64(this)">
                     </div>
                     <div class="form-group">
-                        <label>Veya Medya URL Linki</label>
+                        <label>Veya Link Girin</label>
                         <input type="text" id="hero-media-url" placeholder="https://...">
                     </div>
                     <button type="submit" class="btn">Arka Plana Ekle</button>
@@ -470,10 +488,10 @@
         let db = null;
         try { firebase.initializeApp(firebaseConfig); db = firebase.database(); } catch(e) {}
 
-        /* Arka Plan Medyaları (Slider) */
+        /* Arka Plan Medyaları */
         let heroMediaList = JSON.parse(localStorage.getItem('kutlu_hero_media')) || [
-            { id: 'h1', type: 'image', url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80' },
-            { id: 'h2', type: 'image', url: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80' }
+            { id: 'h1', type: 'image', url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80', fit: 'center' },
+            { id: 'h2', type: 'image', url: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80', fit: 'center' }
         ];
 
         /* Odalar */
@@ -500,7 +518,7 @@
         window.addEventListener('hashchange', checkHash);
         window.addEventListener('load', checkHash);
 
-        /* Hero Slider Çalıştırıcı */
+        /* Hero Slider Düzeltme & Kırpma Odaklı Render */
         function renderHeroSlider() {
             const container = document.getElementById('hero-slider-container');
             container.innerHTML = '';
@@ -520,6 +538,7 @@
                     el.src = item.url;
                 }
                 el.className = `bg-slide-media ${index === 0 ? 'active' : ''}`;
+                el.style.objectPosition = item.fit || 'center'; // Kırpma odak noktası
                 container.appendChild(el);
             });
 
@@ -534,7 +553,7 @@
             }, 4000);
         }
 
-        /* Adminden Arka Plan Medya Ekleme / Silme */
+        /* Admin Arka Plan İşlemleri */
         function convertHeroFileToBase64(input) {
             const file = input.files[0];
             if (file) {
@@ -547,10 +566,11 @@
         function addHeroMedia(e) {
             e.preventDefault();
             const type = document.getElementById('hero-media-type').value;
+            const fit = document.getElementById('hero-media-fit').value;
             const url = document.getElementById('hero-media-url').value;
-            if (!url) return alert('Lütfen bir medya yükleyin veya link yapıştırın!');
+            if (!url) return alert('Lütfen görsel veya video yükleyin!');
 
-            heroMediaList.push({ id: Date.now().toString(), type, url });
+            heroMediaList.push({ id: Date.now().toString(), type, fit, url });
             localStorage.setItem('kutlu_hero_media', JSON.stringify(heroMediaList));
             document.getElementById('hero-media-url').value = '';
             renderAdminHeroList();
@@ -568,7 +588,7 @@
             heroMediaList.forEach((item, index) => {
                 container.innerHTML += `
                     <div style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:8px; border-radius:6px;">
-                        <span>${index + 1}. Medya (${item.type === 'video' ? '🎬 Video' : '🖼️ Resim'})</span>
+                        <span>${index + 1}. Medya (${item.type === 'video' ? '🎬 Video' : '🖼️ Resim'}) - Odak: ${item.fit || 'center'}</span>
                         <button class="btn" style="width:auto; padding:4px 8px; background:#ef4444;" onclick="deleteHeroMedia('${item.id}')">Sil</button>
                     </div>
                 `;
@@ -718,4 +738,3 @@
     </script>
 </body>
 </html>
-

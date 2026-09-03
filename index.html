@@ -347,6 +347,7 @@
                 <h2 class="section-title">Genel Bilgiler</h2>
                 <div class="info-grid">
                     <div class="info-card">
+
                     <div class="info-card">
                         <h4 style="color:var(--accent); margin-bottom:8px;">📍 Ulaşım ve Mesafeler</h4>
                         <p style="font-size:0.85rem; color:#cbd5e1;">Dörtyol Otogar: <strong>5 dk</strong></p>
@@ -428,7 +429,7 @@
                     <select id="cust-children">
                         <option value="Hayır">Hayır (Çocuk Yok)</option>
                         <option value="1 Çocuk">Evet (1 Çocuk)</option>
-                        <option value="3 Çocuk">Evet (3 Çocuk ve üzeri)</option>
+                        <option value="2 Çocuk">Evet (2 Çocuk)</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -449,7 +450,7 @@
 
         <div class="admin-nav">
             <button class="admin-tab-btn active" onclick="switchAdminTab('rooms-tab', this)">
-                🏢 Odaları Yönet
+                🏨 Odaları Yönet
             </button>
             <button class="admin-tab-btn" onclick="switchAdminTab('hero-tab', this)">
                 🖼️ Arka Plan Medyaları
@@ -710,7 +711,7 @@
             try {
                 const imageUrl = await uploadToImgBB(file);
                 document.getElementById('hero-media-url').value = imageUrl;
-                alert("Resim başarıyla yüklendi!");
+                alert("Resim başarıyla ImgBB sunucusuna yüklendi!");
             } catch (err) {
                 alert("Resim yükleme hatası: " + err.message);
             } finally {
@@ -727,7 +728,7 @@
             try {
                 const imageUrl = await uploadToImgBB(file);
                 document.getElementById('admin-media-url').value = imageUrl;
-                alert("Oda resmi başarıyla yüklendi!");
+                alert("Oda resmi başarıyla ImgBB sunucusuna yüklendi!");
             } catch (err) {
                 alert("Resim yükleme hatası: " + err.message);
             } finally {

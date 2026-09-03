@@ -53,6 +53,7 @@
             text-align: center;
             padding: 15px;
             overflow: hidden;
+            background: #111827;
         }
 
         .bg-slider {
@@ -194,32 +195,53 @@
             margin-top: 25px;
         }
 
-        .guide-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        .contact-list {
+            display: flex;
+            flex-direction: column;
             gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .guide-item {
-            background: #0f172a;
-            padding: 12px;
-            border-radius: 6px;
-            border-left: 3px solid var(--accent);
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 15px;
             margin-top: 15px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .info-card {
+        .contact-item {
+            display: flex;
+            align-items: center;
             background: #0f172a;
-            padding: 15px;
+            padding: 12px 18px;
             border-radius: 8px;
-            border-top: 2px solid var(--accent);
+            border: 1px solid #334155;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            background: #1a233a;
+        }
+
+        .contact-icon {
+            font-size: 1.3rem;
+            margin-right: 12px;
+        }
+
+        .contact-text-group {
+            text-align: left;
+        }
+
+        .contact-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        .contact-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
         }
 
         .modal {
@@ -343,54 +365,43 @@
             <h2 class="section-title">Odalarımız</h2>
             <div class="rooms-scroll-wrapper" id="rooms-container"></div>
 
-            <div class="info-block">
-                <h2 class="section-title">Genel Bilgiler</h2>
-                <div class="info-grid">
-                    <div class="info-card">
-
-                    <div class="info-card">
-                        <h4 style="color:var(--accent); margin-bottom:8px;">📍 Ulaşım ve Mesafeler</h4>
-                        <p style="font-size:0.85rem; color:#cbd5e1;">Dörtyol Otogar: <strong>5 dk</strong></p>
-                        <p style="font-size:0.85rem; color:#cbd5e1; margin-top:4px;">İskenderun Merkez: <strong>25 dk</strong></p>
-                        <p style="font-size:0.85rem; color:#cbd5e1; margin-top:4px;">Hatay Havalimanı: <strong>45 dk</strong></p>
-                    </div>
-                    <div class="info-card">
-                        <h4 style="color:var(--accent); margin-bottom:8px;">💡 Hizmetlerimiz</h4>
-                        <p style="font-size:0.85rem; color:#cbd5e1;">• 7/24 Resepsiyon Hizmeti</p>
-                        <p style="font-size:0.85rem; color:#cbd5e1; margin-top:4px;">• Yüksek Hızlı Ücretsiz Wi-Fi</p>
-                        <p style="font-size:0.85rem; color:#cbd5e1; margin-top:4px;">• Günlük Oda Temizliği</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="info-block">
-                <h2 class="section-title">Hatay'da Gezilecek Yerler</h2>
-                <div class="guide-grid">
-                    <div class="guide-item">
-                        <h4>St. Pierre Kilisesi</h4>
-                        <p style="font-size:0.8rem; color:#cbd5e1; margin-top:4px;">Dünyanın ilk mağara kiliselerinden biridir.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>Hatay Arkeoloji Müzesi</h4>
-                        <p style="font-size:0.8rem; color:#cbd5e1; margin-top:4px;">Eşsiz mozaik koleksiyonlarına ev sahipliği yapmaktadır.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>Titus Tüneli</h4>
-                        <p style="font-size:0.8rem; color:#cbd5e1; margin-top:4px;">Roma döneminden kalma devasa tünel.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>İlk Kurşun Müzesi</h4>
-                        <p style="font-size:0.8rem; color:#cbd5e1; margin-top:4px;">Dörtyol'daki Millî Mücadele müzesi.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="info-block" style="text-align: center; margin-top:20px;">
+            <div class="info-block" style="text-align: center; margin-top:30px;">
                 <h2 style="color: var(--accent); margin-bottom: 10px;">İletişim & Konum</h2>
-                <p>📍 Adres: <span id="site-address">Sanayi Mah. 102. Sokak, Dörtyol / Hatay</span></p>
-                <p style="margin: 5px 0;">📞 Telefon: <span id="site-phone">+90 (533) 480 10 87</span></p>
-                <p style="margin: 5px 0; color:#10b981; font-weight:bold;">💬 WhatsApp Hat: <span id="site-whatsapp">+90 505 479 93 93</span></p>
-                <p style="margin-bottom:15px;">✉️ E-Posta: <span id="site-email">info@kutlubayotel.com</span></p>
+                <p style="color:var(--text-muted); font-size:0.85rem;">Bilgilere tıklayarak direkt arama yapabilir veya uygulamayı açabilirsiniz.</p>
+                
+                <div class="contact-list">
+                    <a id="link-address" href="#" target="_blank" class="contact-item">
+                        <span class="contact-icon">📍</span>
+                        <div class="contact-text-group">
+                            <span class="contact-label">Adres (Haritalarda Aç)</span>
+                            <span class="contact-value" id="site-address">Sanayi Mah. 102. Sokak, Dörtyol / Hatay</span>
+                        </div>
+                    </a>
+
+                    <a id="link-phone" href="#" class="contact-item">
+                        <span class="contact-icon">📞</span>
+                        <div class="contact-text-group">
+                            <span class="contact-label">Telefon (Hemen Ara)</span>
+                            <span class="contact-value" id="site-phone">+90 (533) 480 10 87</span>
+                        </div>
+                    </a>
+
+                    <a id="link-whatsapp" href="#" target="_blank" class="contact-item" style="border-color:#25D366;">
+                        <span class="contact-icon">💬</span>
+                        <div class="contact-text-group">
+                            <span class="contact-label">WhatsApp (Mesaj Gönder)</span>
+                            <span class="contact-value" style="color:#25D366;" id="site-whatsapp">+90 505 479 93 93</span>
+                        </div>
+                    </a>
+
+                    <a id="link-email" href="#" class="contact-item">
+                        <span class="contact-icon">✉️</span>
+                        <div class="contact-text-group">
+                            <span class="contact-label">E-Posta (E-Posta Gönder)</span>
+                            <span class="contact-value" id="site-email">info@kutlubayotel.com</span>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -561,7 +572,7 @@
                         <input type="text" id="admin-contact-phone" required>
                     </div>
                     <div class="form-group">
-                        <label>WhatsApp Hat Numarası (Ülke kodu ile, örn: 905054799393)</label>
+                        <label>WhatsApp Hat Numarası (Sadece Rakam, örn: 905054799393)</label>
                         <input type="text" id="admin-contact-whatsapp" required>
                     </div>
                     <div class="form-group">
@@ -604,8 +615,40 @@
             console.error("Firebase hatası:", e);
         }
 
-        let heroMediaList = [];
-        let rooms = [];
+        // Varsayılan Odalar
+        const defaultRooms = [
+            {
+                id: 'r_1',
+                title: 'Standart Çift Kişilik Oda',
+                desc: 'Konforlu çift kişilik yatak, klima, televizyon, Wi-Fi ve özel banyo.',
+                price: '1500',
+                type: 'image',
+                media: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800',
+                status: 'available'
+            },
+            {
+                id: 'r_2',
+                title: 'Lüks Süit Oda',
+                desc: 'Geniş oturma alanı, jakuzi, özel manzaralı balkon ve VIP olanaklar.',
+                price: '2500',
+                type: 'image',
+                media: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800',
+                status: 'available'
+            }
+        ];
+
+        // Varsayılan Arka Plan
+        const defaultHeroMedia = [
+            {
+                id: 'h_1',
+                type: 'image',
+                fit: 'center',
+                url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600'
+            }
+        ];
+
+        let heroMediaList = defaultHeroMedia;
+        let rooms = defaultRooms;
         let contactInfo = {
             address: "Sanayi Mah. 102. Sokak, Dörtyol / Hatay",
             phone: "+90 (533) 480 10 87",
@@ -619,7 +662,11 @@
             // Hero Media Dinle
             db.ref('hero_media').on('value', snapshot => {
                 const data = snapshot.val();
-                heroMediaList = data ? (typeof data === 'object' ? Object.values(data) : data) : [];
+                if (data && ((Array.isArray(data) && data.length > 0) || Object.keys(data).length > 0)) {
+                    heroMediaList = typeof data === 'object' ? Object.values(data) : data;
+                } else {
+                    heroMediaList = defaultHeroMedia;
+                }
                 renderHeroSlider();
                 if (document.getElementById('admin-panel').style.display === 'block') renderAdminHeroList();
             });
@@ -627,7 +674,11 @@
             // Rooms Dinle
             db.ref('rooms').on('value', snapshot => {
                 const data = snapshot.val();
-                rooms = data ? (typeof data === 'object' ? Object.values(data) : data) : [];
+                if (data && ((Array.isArray(data) && data.length > 0) || Object.keys(data).length > 0)) {
+                    rooms = typeof data === 'object' ? Object.values(data) : data;
+                } else {
+                    rooms = defaultRooms;
+                }
                 renderCustomerRooms();
                 if (document.getElementById('admin-panel').style.display === 'block') renderAdminRooms();
             });
@@ -637,8 +688,8 @@
                 const data = snapshot.val();
                 if (data) {
                     contactInfo = data;
-                    renderContactInfo();
                 }
+                renderContactInfo();
             });
         }
 
@@ -683,7 +734,12 @@
         }
 
         window.addEventListener('hashchange', checkHash);
-        document.addEventListener('DOMContentLoaded', checkHash);
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCustomerRooms();
+            renderHeroSlider();
+            renderContactInfo();
+            checkHash();
+        });
 
         // IMGBB YÜKLEME
         async function uploadToImgBB(file) {
@@ -763,13 +819,15 @@
 
             if (sliderInterval) clearInterval(sliderInterval);
             let currentIndex = 0;
-            sliderInterval = setInterval(() => {
-                const slides = container.querySelectorAll('.bg-slide-media');
-                if (slides.length <= 1) return;
-                slides[currentIndex].classList.remove('active');
-                currentIndex = (currentIndex + 1) % slides.length;
-                slides[currentIndex].classList.add('active');
-            }, 4000);
+            if (heroMediaList.length > 1) {
+                sliderInterval = setInterval(() => {
+                    const slides = container.querySelectorAll('.bg-slide-media');
+                    if (slides.length <= 1) return;
+                    slides[currentIndex].classList.remove('active');
+                    currentIndex = (currentIndex + 1) % slides.length;
+                    slides[currentIndex].classList.add('active');
+                }, 4000);
+            }
         }
 
         function addHeroMedia(e) {
@@ -785,12 +843,14 @@
             if (db) db.ref('hero_media').set(heroMediaList);
             document.getElementById('hero-media-url').value = '';
             renderAdminHeroList();
+            renderHeroSlider();
         }
 
         function deleteHeroMedia(id) {
             heroMediaList = heroMediaList.filter(h => h.id !== id);
             if (db) db.ref('hero_media').set(heroMediaList);
             renderAdminHeroList();
+            renderHeroSlider();
         }
 
         function renderAdminHeroList() {
@@ -920,6 +980,7 @@
             document.getElementById('room-form').reset();
             document.getElementById('edit-room-id').value = '';
             renderAdminRooms();
+            renderCustomerRooms();
             alert("Oda kaydı güncellendi!");
         }
 
@@ -941,37 +1002,61 @@
                 rooms = rooms.filter(r => r.id !== id);
                 if (db) db.ref('rooms').set(rooms);
                 renderAdminRooms();
+                renderCustomerRooms();
             }
         }
 
-        // İLETİŞİM BİLGİLERİ İŞLEMLERİ
+        // İLETİŞİM BİLGİLERİ İŞLEMLERİ (DİNAMİK LİNK YÖNLENDİRMELERİ)
         function renderContactInfo() {
+            const cleanPhone = (contactInfo.phone || '').replace(/[^0-9+]/g, '');
+            const rawWhatsapp = contactInfo.whatsappRaw || (contactInfo.whatsapp || '').replace(/[^0-9]/g, '');
+
+            // Adres Metni & Harita Linki
             if(document.getElementById('site-address')) document.getElementById('site-address').innerText = contactInfo.address;
+            if(document.getElementById('link-address')) {
+                document.getElementById('link-address').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`;
+            }
+
+            // Telefon Metni & Arama Linki
             if(document.getElementById('site-phone')) document.getElementById('site-phone').innerText = contactInfo.phone;
+            if(document.getElementById('link-phone')) {
+                document.getElementById('link-phone').href = `tel:${cleanPhone}`;
+            }
+
+            // WhatsApp Metni & WhatsApp Linki
             if(document.getElementById('site-whatsapp')) document.getElementById('site-whatsapp').innerText = contactInfo.whatsapp;
+            if(document.getElementById('link-whatsapp')) {
+                document.getElementById('link-whatsapp').href = `https://wa.me/${rawWhatsapp}`;
+            }
+
+            // E-Posta Metni & Mailto Linki
             if(document.getElementById('site-email')) document.getElementById('site-email').innerText = contactInfo.email;
+            if(document.getElementById('link-email')) {
+                document.getElementById('link-email').href = `mailto:${contactInfo.email}`;
+            }
         }
 
         function loadAdminContactForm() {
             document.getElementById('admin-contact-address').value = contactInfo.address || '';
             document.getElementById('admin-contact-phone').value = contactInfo.phone || '';
-            document.getElementById('admin-contact-whatsapp').value = contactInfo.whatsapp || '';
+            document.getElementById('admin-contact-whatsapp').value = contactInfo.whatsappRaw || contactInfo.whatsapp || '';
             document.getElementById('admin-contact-email').value = contactInfo.email || '';
         }
 
         function saveContactInfo(e) {
             e.preventDefault();
+            const rawWa = document.getElementById('admin-contact-whatsapp').value.replace(/[^0-9]/g, '');
             contactInfo = {
                 address: document.getElementById('admin-contact-address').value,
                 phone: document.getElementById('admin-contact-phone').value,
-                whatsapp: document.getElementById('admin-contact-whatsapp').value,
-                whatsappRaw: document.getElementById('admin-contact-whatsapp').value.replace(/[^0-9]/g, ''),
+                whatsapp: "+" + rawWa,
+                whatsappRaw: rawWa,
                 email: document.getElementById('admin-contact-email').value
             };
 
             if (db) db.ref('contact_info').set(contactInfo);
             renderContactInfo();
-            alert("İletişim bilgileri başarıyla güncellendi!");
+            alert("İletişim bilgileri ve yönlendirme linkleri güncellendi!");
         }
     </script>
 </body>

@@ -43,11 +43,11 @@
             border: 1px solid var(--accent);
         }
 
-        /* YÜKSEKLİK DÜZELTİLDİ VE KISALTILDI */
+        /* HERO BANNER - KISALTILMIŞ VE UYUMU ARTIRILMIŞ */
         .hero-banner {
-            height: 45vh;
-            min-height: 320px;
-            max-height: 500px;
+            height: 50vh;
+            min-height: 350px;
+            max-height: 550px;
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -65,17 +65,15 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
-        /* GÖRSEL KESİLME VE YAKINLAŞMA SORUNU ÇÖZÜLDÜ */
+        /* GÖRSELLER BÜTÜN KÖŞELERİ DOLDURUR (BOŞLUK KALMAZ) */
         .bg-slide-media {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            object-fit: contain;
+            object-fit: cover;
+            object-position: center;
             opacity: 0;
             transition: opacity 0.8s ease-in-out;
         }
@@ -87,7 +85,7 @@
         .hero-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.45);
+            background: rgba(15, 23, 42, 0.5);
             z-index: 2;
             pointer-events: none;
         }
@@ -168,21 +166,20 @@
             flex-direction: column;
         }
 
-        /* ODA RESİMLERİ İÇİN DÜZELTME */
+        /* ODA RESİMLERİ İÇİN TAM DOLDURMA (COVER) */
         .room-media-box {
             width: 100%;
-            height: 200px;
+            height: 220px;
             background: #090d16;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             overflow: hidden;
         }
 
         .room-media {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
+            object-position: center;
+            display: block;
         }
 
         .room-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
@@ -360,7 +357,7 @@
         .loading-text { color: var(--accent); font-size: 0.8rem; display: none; margin-top: 4px; }
 
         @media(max-width: 768px) {
-            .hero-banner { height: 35vh; min-height: 260px; }
+            .hero-banner { height: 40vh; min-height: 280px; }
             .hotel-title { font-size: 1.5rem; }
             .hero-subtitle { font-size: 0.8rem; }
             .admin-grid { grid-template-columns: 1fr; }

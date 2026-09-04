@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kutlubay Otel | Dörtyol Hatay</title>
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <!-- Google Translate API -->
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <style>
         :root {
@@ -41,9 +43,11 @@
             border: 1px solid var(--accent);
         }
 
+        /* YÜKSEKLİK DÜZELTİLDİ VE KISALTILDI */
         .hero-banner {
-            height: 80vh;
-            min-height: 480px;
+            height: 45vh;
+            min-height: 320px;
+            max-height: 500px;
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -53,7 +57,7 @@
             text-align: center;
             padding: 15px;
             overflow: hidden;
-            background: #111827;
+            background: #090d16;
         }
 
         .bg-slider {
@@ -61,16 +65,19 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
+        /* GÖRSEL KESİLME VE YAKINLAŞMA SORUNU ÇÖZÜLDÜ */
         .bg-slide-media {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            object-fit: cover;
-            object-position: center;
+            object-fit: contain;
             opacity: 0;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 0.8s ease-in-out;
         }
 
         .bg-slide-media.active {
@@ -80,35 +87,37 @@
         .hero-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(15, 23, 42, 0.45);
             z-index: 2;
+            pointer-events: none;
         }
 
         .hotel-title {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 800;
             color: var(--accent);
             z-index: 3;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
             letter-spacing: 1px;
         }
 
         .hero-subtitle {
             z-index: 3;
-            font-size: 0.95rem;
-            margin-top: 8px;
+            font-size: 0.9rem;
+            margin-top: 6px;
             color: #e2e8f0;
             max-width: 90%;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.9);
         }
 
         .scroll-down {
             position: absolute;
-            bottom: 15px;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 3;
             color: var(--accent);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             text-decoration: none;
             display: flex;
             flex-direction: column;
@@ -116,23 +125,23 @@
             animation: bounce 2s infinite;
         }
 
-        .scroll-down span { font-size: 1.3rem; margin-top: -2px; }
+        .scroll-down span { font-size: 1.1rem; margin-top: -2px; }
 
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
-            40% { transform: translateY(-6px) translateX(-50%); }
-            60% { transform: translateY(-3px) translateX(-50%); }
+            40% { transform: translateY(-5px) translateX(-50%); }
+            60% { transform: translateY(-2px) translateX(-50%); }
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 30px 15px;
+            padding: 25px 15px;
         }
 
         .section-title {
             text-align: center;
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             color: var(--accent);
             margin-bottom: 20px;
         }
@@ -149,17 +158,34 @@
         .rooms-scroll-wrapper::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
 
         .room-card {
-            flex: 0 0 calc(50% - 10px);
-            min-width: 260px;
+            flex: 0 0 320px;
             background: var(--card-bg);
             border-radius: 10px;
             overflow: hidden;
             scroll-snap-align: start;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
         }
 
-        .room-media { width: 100%; height: 180px; object-fit: cover; }
-        .room-info { padding: 15px; }
+        /* ODA RESİMLERİ İÇİN DÜZELTME */
+        .room-media-box {
+            width: 100%;
+            height: 200px;
+            background: #090d16;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .room-media {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .room-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .room-title { font-size: 1.1rem; margin-bottom: 8px; color: #fff; font-weight: bold; }
 
         .room-status {
@@ -169,6 +195,7 @@
             font-size: 0.75rem;
             font-weight: bold;
             margin-bottom: 10px;
+            width: fit-content;
         }
         .status-available { background: #10b981; color: #fff; }
         .status-full { background: #ef4444; color: #fff; }
@@ -255,21 +282,9 @@
             margin-right: 12px;
         }
 
-        .contact-text-group {
-            text-align: left;
-        }
-
-        .contact-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            display: block;
-        }
-
-        .contact-value {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #fff;
-        }
+        .contact-text-group { text-align: left; }
+        .contact-label { font-size: 0.75rem; color: var(--text-muted); display: block; }
+        .contact-value { font-size: 0.95rem; font-weight: 600; color: #fff; }
 
         .modal {
             display: none;
@@ -339,34 +354,18 @@
             border-color: var(--accent);
         }
 
-        .admin-tab-content {
-            display: none;
-        }
-
-        .admin-tab-content.active {
-            display: block;
-        }
-
-        .admin-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .loading-text {
-            color: var(--accent);
-            font-size: 0.8rem;
-            display: none;
-            margin-top: 4px;
-        }
+        .admin-tab-content { display: none; }
+        .admin-tab-content.active { display: block; }
+        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .loading-text { color: var(--accent); font-size: 0.8rem; display: none; margin-top: 4px; }
 
         @media(max-width: 768px) {
-            .hero-banner { height: 65vh; min-height: 380px; }
-            .hotel-title { font-size: 1.8rem; }
-            .hero-subtitle { font-size: 0.85rem; }
+            .hero-banner { height: 35vh; min-height: 260px; }
+            .hotel-title { font-size: 1.5rem; }
+            .hero-subtitle { font-size: 0.8rem; }
             .admin-grid { grid-template-columns: 1fr; }
             .history-grid { grid-template-columns: 1fr; }
-            .room-card { flex: 0 0 calc(85% - 10px); }
+            .room-card { flex: 0 0 85%; }
         }
     </style>
 </head>
@@ -393,6 +392,7 @@
             <h2 class="section-title">Odalarımız</h2>
             <div class="rooms-scroll-wrapper" id="rooms-container"></div>
 
+            <!-- HATAY'IN TARİHİ BÖLÜMÜ -->
             <div class="info-block">
                 <h2 class="section-title">Tarihin ve Kültürün Buluşma Noktası: Hatay</h2>
                 <div class="history-grid">
@@ -411,6 +411,7 @@
                 </div>
             </div>
 
+            <!-- İLETİŞİM & KONUM -->
             <div class="info-block" style="text-align: center; margin-top:30px;">
                 <h2 style="color: var(--accent); margin-bottom: 10px;">İletişim & Konum</h2>
                 <p style="color:var(--text-muted); font-size:0.85rem;">Bilgilere tıklayarak direkt arama yapabilir veya uygulamayı açabilirsiniz.</p>
@@ -452,6 +453,7 @@
         </div>
     </div>
 
+    <!-- REZERVASYON MODAL -->
     <div class="modal" id="booking-modal">
         <div class="modal-content">
             <h3 style="color: var(--accent); margin-bottom: 15px;" id="modal-room-title">Oda Rezervasyonu</h3>
@@ -499,6 +501,7 @@
         </div>
     </div>
 
+    <!-- ADMIN PANEL -->
     <div id="admin-panel">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #334155; padding-bottom:15px;">
             <h2 style="color:var(--accent);">Kutlubay Otel - Yönetim Paneli</h2>
@@ -517,6 +520,7 @@
             </button>
         </div>
 
+        <!-- TAB 1: ODA YÖNETİMİ -->
         <div id="rooms-tab" class="admin-tab-content active">
             <div class="admin-grid">
                 <div style="background:var(--card-bg); padding:20px; border-radius:10px;">
@@ -566,6 +570,7 @@
             </div>
         </div>
 
+        <!-- TAB 2: ARKA PLAN MEDYALARI -->
         <div id="hero-tab" class="admin-tab-content">
             <div style="background:var(--card-bg); padding:20px; border-radius:10px;">
                 <h3 style="color:var(--accent); margin-bottom:12px;">🖼️ Ana Ekran Arka Plan Medyaları</h3>
@@ -576,14 +581,6 @@
                             <select id="hero-media-type">
                                 <option value="image">Görsel (Resim)</option>
                                 <option value="video">Video (MP4 vb.)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Kırpma Odak Hizalaması</label>
-                            <select id="hero-media-fit">
-                                <option value="center">Tam Ortala (Varsayılan)</option>
-                                <option value="top">Üst Kısmı Odakla</option>
-                                <option value="bottom">Alt Kısmı Odakla</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -605,6 +602,7 @@
             </div>
         </div>
 
+        <!-- TAB 3: İLETİŞİM AYARLARI -->
         <div id="contact-tab" class="admin-tab-content">
             <div style="background:var(--card-bg); padding:20px; border-radius:10px; max-width:600px;">
                 <h3 style="color:var(--accent); margin-bottom:12px;">⚙️ Otel İletişim Bilgilerini Düzenle</h3>
@@ -661,7 +659,6 @@
             console.error("Firebase hatası:", e);
         }
 
-        // Varsayılan Odalar
         const defaultRooms = [
             {
                 id: 'r_1',
@@ -683,12 +680,10 @@
             }
         ];
 
-        // Varsayılan Arka Plan
         const defaultHeroMedia = [
             {
                 id: 'h_1',
                 type: 'image',
-                fit: 'center',
                 url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600'
             }
         ];
@@ -705,7 +700,6 @@
         let sliderInterval = null;
 
         if (db) {
-            // Hero Media Dinle
             db.ref('hero_media').on('value', snapshot => {
                 const data = snapshot.val();
                 if (data && ((Array.isArray(data) && data.length > 0) || Object.keys(data).length > 0)) {
@@ -717,7 +711,6 @@
                 if (document.getElementById('admin-panel').style.display === 'block') renderAdminHeroList();
             });
 
-            // Rooms Dinle
             db.ref('rooms').on('value', snapshot => {
                 const data = snapshot.val();
                 if (data && ((Array.isArray(data) && data.length > 0) || Object.keys(data).length > 0)) {
@@ -729,12 +722,9 @@
                 if (document.getElementById('admin-panel').style.display === 'block') renderAdminRooms();
             });
 
-            // Contact Info Dinle
             db.ref('contact_info').on('value', snapshot => {
                 const data = snapshot.val();
-                if (data) {
-                    contactInfo = data;
-                }
+                if (data) contactInfo = data;
                 renderContactInfo();
             });
         }
@@ -787,7 +777,6 @@
             checkHash();
         });
 
-        // IMGBB YÜKLEME
         async function uploadToImgBB(file) {
             const formData = new FormData();
             formData.append("image", file);
@@ -813,9 +802,9 @@
             try {
                 const imageUrl = await uploadToImgBB(file);
                 document.getElementById('hero-media-url').value = imageUrl;
-                alert("Resim başarıyla ImgBB sunucusuna yüklendi!");
+                alert("Resim yüklendi!");
             } catch (err) {
-                alert("Resim yükleme hatası: " + err.message);
+                alert("Yükleme hatası: " + err.message);
             } finally {
                 loadingText.style.display = 'none';
             }
@@ -830,15 +819,14 @@
             try {
                 const imageUrl = await uploadToImgBB(file);
                 document.getElementById('admin-media-url').value = imageUrl;
-                alert("Oda resmi başarıyla ImgBB sunucusuna yüklendi!");
+                alert("Oda resmi yüklendi!");
             } catch (err) {
-                alert("Resim yükleme hatası: " + err.message);
+                alert("Yükleme hatası: " + err.message);
             } finally {
                 loadingText.style.display = 'none';
             }
         }
 
-        // SLIDER
         function renderHeroSlider() {
             const container = document.getElementById('hero-slider-container');
             if (!container) return;
@@ -859,7 +847,6 @@
                     el.src = item.url;
                 }
                 el.className = `bg-slide-media ${index === 0 ? 'active' : ''}`;
-                el.style.objectPosition = item.fit || 'center';
                 container.appendChild(el);
             });
 
@@ -879,11 +866,10 @@
         function addHeroMedia(e) {
             e.preventDefault();
             const type = document.getElementById('hero-media-type').value;
-            const fit = document.getElementById('hero-media-fit').value;
             const url = document.getElementById('hero-media-url').value;
             if (!url) return alert('Lütfen görsel veya video yükleyin!');
 
-            const newItem = { id: 'h_' + Date.now(), type, fit, url };
+            const newItem = { id: 'h_' + Date.now(), type, url };
             heroMediaList.push(newItem);
             
             if (db) db.ref('hero_media').set(heroMediaList);
@@ -906,14 +892,13 @@
             heroMediaList.forEach((item, index) => {
                 container.innerHTML += `
                     <div style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:8px; border-radius:6px;">
-                        <span>${index + 1}. Medya (${item.type === 'video' ? '🎬 Video' : '🖼️ Resim'}) - Odak: ${item.fit || 'center'}</span>
+                        <span>${index + 1}. Medya (${item.type === 'video' ? '🎬 Video' : '🖼️ Resim'})</span>
                         <button class="btn" style="width:auto; padding:4px 8px; background:#ef4444;" onclick="deleteHeroMedia('${item.id}')">Sil</button>
                     </div>
                 `;
             });
         }
 
-        // MÜŞTERİ ODA LİSTELEME
         function renderCustomerRooms() {
             const container = document.getElementById('rooms-container');
             if(!container) return;
@@ -933,20 +918,25 @@
 
                 container.innerHTML += `
                     <div class="room-card">
-                        ${mediaTag}
+                        <div class="room-media-box">
+                            ${mediaTag}
+                        </div>
                         <div class="room-info">
-                            <div class="room-title">${room.title}</div>
-                            ${statusTag}
-                            <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 10px;">${room.desc}</p>
-                            <div style="font-weight: bold; color: var(--accent); margin-bottom: 10px;">${room.price} TL / Gece</div>
-                            ${btnTag}
+                            <div>
+                                <div class="room-title">${room.title}</div>
+                                ${statusTag}
+                                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 10px;">${room.desc}</p>
+                            </div>
+                            <div>
+                                <div style="font-weight: bold; color: var(--accent); margin-bottom: 10px;">${room.price} TL / Gece</div>
+                                ${btnTag}
+                            </div>
                         </div>
                     </div>
                 `;
             });
         }
 
-        // REZERVASYON VE WHATSAPP
         function openBookingModal(title) {
             document.getElementById('book-room-title').value = title;
             document.getElementById('modal-room-title').innerText = title + ' - Rezervasyon';
@@ -982,7 +972,6 @@
             closeModal();
         }
 
-        // ODA İŞLEMLERİ (ADMIN)
         function renderAdminRooms() {
             const container = document.getElementById('admin-rooms-container');
             if(!container) return;
@@ -1052,30 +1041,25 @@
             }
         }
 
-        // İLETİŞİM BİLGİLERİ İŞLEMLERİ (DİNAMİK LİNK YÖNLENDİRMELERİ)
         function renderContactInfo() {
             const cleanPhone = (contactInfo.phone || '').replace(/[^0-9+]/g, '');
             const rawWhatsapp = contactInfo.whatsappRaw || (contactInfo.whatsapp || '').replace(/[^0-9]/g, '');
 
-            // Adres Metni & Harita Linki
             if(document.getElementById('site-address')) document.getElementById('site-address').innerText = contactInfo.address;
             if(document.getElementById('link-address')) {
                 document.getElementById('link-address').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`;
             }
 
-            // Telefon Metni & Arama Linki
             if(document.getElementById('site-phone')) document.getElementById('site-phone').innerText = contactInfo.phone;
             if(document.getElementById('link-phone')) {
                 document.getElementById('link-phone').href = `tel:${cleanPhone}`;
             }
 
-            // WhatsApp Metni & WhatsApp Linki
             if(document.getElementById('site-whatsapp')) document.getElementById('site-whatsapp').innerText = contactInfo.whatsapp;
             if(document.getElementById('link-whatsapp')) {
                 document.getElementById('link-whatsapp').href = `https://wa.me/${rawWhatsapp}`;
             }
 
-            // E-Posta Metni & Mailto Linki
             if(document.getElementById('site-email')) document.getElementById('site-email').innerText = contactInfo.email;
             if(document.getElementById('link-email')) {
                 document.getElementById('link-email').href = `mailto:${contactInfo.email}`;
@@ -1102,7 +1086,7 @@
 
             if (db) db.ref('contact_info').set(contactInfo);
             renderContactInfo();
-            alert("İletişim bilgileri ve yönlendirme linkleri güncellendi!");
+            alert("İletişim bilgileri güncellendi!");
         }
     </script>
 </body>

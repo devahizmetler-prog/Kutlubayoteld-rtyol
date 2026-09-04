@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kutlubay Otel | Dörtyol Hatay</title>
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-    <!-- Google Translate API -->
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
     <style>
         :root {
             --primary: #1a365d;
@@ -43,11 +44,11 @@
             border: 1px solid var(--accent);
         }
 
-        /* HERO BANNER - KISALTILMIŞ VE UYUMU ARTIRILMIŞ */
+        /* HERO BANNER */
         .hero-banner {
-            height: 50vh;
-            min-height: 350px;
-            max-height: 550px;
+            height: 45vh;
+            min-height: 320px;
+            max-height: 500px;
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -67,7 +68,6 @@
             z-index: 1;
         }
 
-        /* GÖRSELLER BÜTÜN KÖŞELERİ DOLDURUR (BOŞLUK KALMAZ) */
         .bg-slide-media {
             position: absolute;
             top: 0; left: 0;
@@ -78,9 +78,7 @@
             transition: opacity 0.8s ease-in-out;
         }
 
-        .bg-slide-media.active {
-            opacity: 1;
-        }
+        .bg-slide-media.active { opacity: 1; }
 
         .hero-overlay {
             position: absolute;
@@ -146,7 +144,7 @@
 
         .rooms-scroll-wrapper {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             overflow-x: auto;
             padding-bottom: 15px;
             scroll-snap-type: x mandatory;
@@ -156,9 +154,9 @@
         .rooms-scroll-wrapper::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
 
         .room-card {
-            flex: 0 0 320px;
+            flex: 0 0 340px;
             background: var(--card-bg);
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
             scroll-snap-align: start;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
@@ -166,24 +164,34 @@
             flex-direction: column;
         }
 
-        /* ODA RESİMLERİ İÇİN TAM DOLDURMA (COVER) */
+        /* ODA ÇOKLU RESİM SLIDER'I */
         .room-media-box {
             width: 100%;
             height: 220px;
             background: #090d16;
+            position: relative;
             overflow: hidden;
         }
 
-        .room-media {
+        .room-slider-track {
+            display: flex;
             width: 100%;
             height: 100%;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+        .room-slider-track::-webkit-scrollbar { display: none; }
+
+        .room-media-item {
+            flex: 0 0 100%;
+            height: 100%;
             object-fit: cover;
-            object-position: center;
-            display: block;
+            scroll-snap-align: start;
         }
 
         .room-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .room-title { font-size: 1.1rem; margin-bottom: 8px; color: #fff; font-weight: bold; }
+        .room-title { font-size: 1.2rem; margin-bottom: 6px; color: #fff; font-weight: bold; }
 
         .room-status {
             display: inline-block;
@@ -191,11 +199,31 @@
             border-radius: 12px;
             font-size: 0.75rem;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             width: fit-content;
         }
         .status-available { background: #10b981; color: #fff; }
         .status-full { background: #ef4444; color: #fff; }
+
+        /* ODA ÖZELLİKLERİ (AMENITIES) ROZETLERİ */
+        .room-amenities-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 10px 0;
+        }
+
+        .amenity-badge {
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #cbd5e1;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
 
         .btn {
             background: var(--accent);
@@ -234,17 +262,8 @@
             border-left: 4px solid var(--accent);
         }
 
-        .history-card h3 {
-            color: var(--accent);
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-
-        .history-card p {
-            color: #cbd5e1;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
+        .history-card h3 { color: var(--accent); margin-bottom: 10px; font-size: 1.1rem; }
+        .history-card p { color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; }
 
         .contact-list {
             display: flex;
@@ -274,15 +293,12 @@
             background: #1a233a;
         }
 
-        .contact-icon {
-            font-size: 1.3rem;
-            margin-right: 12px;
-        }
-
+        .contact-icon { font-size: 1.3rem; margin-right: 12px; }
         .contact-text-group { text-align: left; }
         .contact-label { font-size: 0.75rem; color: var(--text-muted); display: block; }
         .contact-value { font-size: 0.95rem; font-weight: 600; color: #fff; }
 
+        /* MODAL */
         .modal {
             display: none;
             position: fixed;
@@ -298,7 +314,7 @@
             background: var(--card-bg);
             padding: 20px;
             border-radius: 10px;
-            max-width: 420px;
+            max-width: 450px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
@@ -310,7 +326,7 @@
             width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #334155; background: #0f172a; color: #fff;
         }
 
-        /* ADMIN PANEL STYLES */
+        /* ADMIN PANEL */
         #admin-panel {
             display: none;
             position: fixed;
@@ -345,21 +361,89 @@
             white-space: nowrap;
         }
 
-        .admin-tab-btn.active {
-            background: var(--accent);
-            color: #fff;
-            border-color: var(--accent);
-        }
-
+        .admin-tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
         .admin-tab-content { display: none; }
         .admin-tab-content.active { display: block; }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .loading-text { color: var(--accent); font-size: 0.8rem; display: none; margin-top: 4px; }
 
+        /* ÖZELLİK SEÇİM BUTONLARI (ADMIN) */
+        .amenity-toggle-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .amenity-toggle-btn {
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #94a3b8;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            user-select: none;
+            transition: 0.2s;
+        }
+
+        .amenity-toggle-btn.selected {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        /* YÜKLENEN GÖRSEL LİSTESİ (ADMIN) */
+        .uploaded-images-preview {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .preview-thumb-box {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--accent);
+        }
+        .preview-thumb-box img { width: 100%; height: 100%; object-fit: cover; }
+        .preview-thumb-del {
+            position: absolute;
+            top: 2px; right: 2px;
+            background: rgba(239, 68, 68, 0.9);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 18px; height: 18px;
+            font-size: 10px;
+            cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* CROPPER MODAL */
+        #crop-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.95);
+            z-index: 20000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .crop-container {
+            max-width: 90vw;
+            max-height: 70vh;
+            overflow: hidden;
+        }
+        .crop-container img { max-width: 100%; max-height: 70vh; }
+
         @media(max-width: 768px) {
-            .hero-banner { height: 40vh; min-height: 280px; }
+            .hero-banner { height: 35vh; min-height: 260px; }
             .hotel-title { font-size: 1.5rem; }
-            .hero-subtitle { font-size: 0.8rem; }
             .admin-grid { grid-template-columns: 1fr; }
             .history-grid { grid-template-columns: 1fr; }
             .room-card { flex: 0 0 85%; }
@@ -389,7 +473,6 @@
             <h2 class="section-title">Odalarımız</h2>
             <div class="rooms-scroll-wrapper" id="rooms-container"></div>
 
-            <!-- HATAY'IN TARİHİ BÖLÜMÜ -->
             <div class="info-block">
                 <h2 class="section-title">Tarihin ve Kültürün Buluşma Noktası: Hatay</h2>
                 <div class="history-grid">
@@ -408,7 +491,6 @@
                 </div>
             </div>
 
-            <!-- İLETİŞİM & KONUM -->
             <div class="info-block" style="text-align: center; margin-top:30px;">
                 <h2 style="color: var(--accent); margin-bottom: 10px;">İletişim & Konum</h2>
                 <p style="color:var(--text-muted); font-size:0.85rem;">Bilgilere tıklayarak direkt arama yapabilir veya uygulamayı açabilirsiniz.</p>
@@ -450,7 +532,6 @@
         </div>
     </div>
 
-    <!-- REZERVASYON MODAL -->
     <div class="modal" id="booking-modal">
         <div class="modal-content">
             <h3 style="color: var(--accent); margin-bottom: 15px;" id="modal-room-title">Oda Rezervasyonu</h3>
@@ -498,7 +579,6 @@
         </div>
     </div>
 
-    <!-- ADMIN PANEL -->
     <div id="admin-panel">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #334155; padding-bottom:15px;">
             <h2 style="color:var(--accent);">Kutlubay Otel - Yönetim Paneli</h2>
@@ -517,7 +597,6 @@
             </button>
         </div>
 
-        <!-- TAB 1: ODA YÖNETİMİ -->
         <div id="rooms-tab" class="admin-tab-content active">
             <div class="admin-grid">
                 <div style="background:var(--card-bg); padding:20px; border-radius:10px;">
@@ -526,7 +605,7 @@
                         <input type="hidden" id="edit-room-id">
                         <div class="form-group">
                             <label>Oda Başlığı</label>
-                            <input type="text" id="admin-room-title" required placeholder="Süit Oda">
+                            <input type="text" id="admin-room-title" required placeholder="Örn: Süit Oda">
                         </div>
                         <div class="form-group">
                             <label>Açıklama</label>
@@ -536,19 +615,20 @@
                             <label>Fiyat (TL/Gece)</label>
                             <input type="number" id="admin-room-price" required>
                         </div>
+
                         <div class="form-group">
-                            <label>Medya Türü</label>
-                            <select id="admin-media-type">
-                                <option value="image">Resim</option>
-                                <option value="video">Video</option>
-                            </select>
+                            <label>Oda Özellikleri (Tıklayarak Seçin):</label>
+                            <div class="amenity-toggle-group" id="amenities-container">
+                                </div>
                         </div>
+
                         <div class="form-group">
-                            <label>Galeriden Otomatik Yükle</label>
-                            <input type="file" accept="image/*,video/*" onchange="uploadRoomMediaAuto(this)" style="margin-bottom:6px;">
-                            <div id="room-loading" class="loading-text">⏳ Yükleniyor, lütfen bekleyin...</div>
-                            <input type="text" id="admin-media-url" placeholder="https://..." required style="margin-top:6px;">
+                            <label>Oda Fotoğrafları Ekleyin (Kırparak Yüklenir)</label>
+                            <input type="file" accept="image/*" onchange="initCropProcess(this, 'room')" style="margin-bottom:6px;">
+                            <div id="room-loading" class="loading-text">⏳ Yükleniyor...</div>
+                            <div class="uploaded-images-preview" id="room-images-preview"></div>
                         </div>
+
                         <div class="form-group">
                             <label>Müsaitlik Durumu</label>
                             <select id="admin-room-status">
@@ -567,7 +647,6 @@
             </div>
         </div>
 
-        <!-- TAB 2: ARKA PLAN MEDYALARI -->
         <div id="hero-tab" class="admin-tab-content">
             <div style="background:var(--card-bg); padding:20px; border-radius:10px;">
                 <h3 style="color:var(--accent); margin-bottom:12px;">🖼️ Ana Ekran Arka Plan Medyaları</h3>
@@ -575,18 +654,18 @@
                     <form onsubmit="addHeroMedia(event)">
                         <div class="form-group">
                             <label>Medya Türü</label>
-                            <select id="hero-media-type">
-                                <option value="image">Görsel (Resim)</option>
-                                <option value="video">Video (MP4 vb.)</option>
+                            <select id="hero-media-type" onchange="toggleHeroInputType(this.value)">
+                                <option value="image">Görsel (Resim - Kırpılarak Yüklenir)</option>
+                                <option value="video">Video (Link/Dosya)</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>Galeriden Otomatik Yükle</label>
-                            <input type="file" accept="image/*,video/*" onchange="uploadHeroMediaAuto(this)">
-                            <div id="hero-loading" class="loading-text">⏳ Yükleniyor, lütfen bekleyin...</div>
+                        <div class="form-group" id="hero-file-box">
+                            <label>Galeriden Resim Seç & Kırp</label>
+                            <input type="file" accept="image/*,video/*" onchange="initCropProcess(this, 'hero')">
+                            <div id="hero-loading" class="loading-text">⏳ Yükleniyor...</div>
                         </div>
                         <div class="form-group">
-                            <label>Veya Link Girin</label>
+                            <label>Veya Doğrudan Link Girin</label>
                             <input type="text" id="hero-media-url" placeholder="https://...">
                         </div>
                         <button type="submit" class="btn">Arka Plana Ekle</button>
@@ -599,7 +678,6 @@
             </div>
         </div>
 
-        <!-- TAB 3: İLETİŞİM AYARLARI -->
         <div id="contact-tab" class="admin-tab-content">
             <div style="background:var(--card-bg); padding:20px; border-radius:10px; max-width:600px;">
                 <h3 style="color:var(--accent); margin-bottom:12px;">⚙️ Otel İletişim Bilgilerini Düzenle</h3>
@@ -624,11 +702,40 @@
                 </form>
             </div>
         </div>
+    </div>
 
+    <div id="crop-modal">
+        <h3 style="color:var(--accent); margin-bottom:10px;">Görseli İstediğiniz Gibi Kırpın</h3>
+        <div class="crop-container">
+            <img id="crop-image-target" src="">
+        </div>
+        <div style="margin-top:15px; display:flex; gap:10px;">
+            <button class="btn" onclick="applyCrop()" style="width:auto; padding:8px 25px;">Kırp ve Yükle</button>
+            <button class="btn" onclick="cancelCrop()" style="width:auto; background:#ef4444; padding:8px 20px;">İptal</button>
+        </div>
     </div>
 
     <script>
         const IMGBB_API_KEY = "E4b0ac1b3c9aefeef5fb9f825287b0d8";
+
+        // HAZIR ODA ÖZELLİKLERİ LİSTESİ
+        const availableAmenities = [
+            { id: 'wifi', label: '🛜 Ücretsiz Wi-Fi' },
+            { id: 'ac', label: '❄️ Klima' },
+            { id: 'tv', label: '📺 LED TV' },
+            { id: 'minibar', label: '🥤 Minibar' },
+            { id: 'jacuzzi', label: '🛁 Jakuzi' },
+            { id: 'balcony', label: '🌅 Balkon' },
+            { id: 'breakfast', label: '🍳 Kahvaltı Dahil' },
+            { id: 'roomservice', label: '🛎️ 24 Saat Oda Servisi' },
+            { id: 'safe', label: '🔒 Çelik Kasa' },
+            { id: 'hairdryer', label: '💨 Saç Kurutma' }
+        ];
+
+        let selectedAmenities = [];
+        let currentRoomImages = []; // Seçilen odanın fotoğrafları
+        let cropper = null;
+        let cropTargetType = ''; // 'room' veya 'hero'
 
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
@@ -652,9 +759,7 @@
         try {
             firebase.initializeApp(firebaseConfig);
             db = firebase.database();
-        } catch(e) {
-            console.error("Firebase hatası:", e);
-        }
+        } catch(e) { console.error("Firebase hatası:", e); }
 
         const defaultRooms = [
             {
@@ -662,27 +767,14 @@
                 title: 'Standart Çift Kişilik Oda',
                 desc: 'Konforlu çift kişilik yatak, klima, televizyon, Wi-Fi ve özel banyo.',
                 price: '1500',
-                type: 'image',
-                media: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800',
-                status: 'available'
-            },
-            {
-                id: 'r_2',
-                title: 'Lüks Süit Oda',
-                desc: 'Geniş oturma alanı, jakuzi, özel manzaralı balkon ve VIP olanaklar.',
-                price: '2500',
-                type: 'image',
-                media: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800',
+                images: ['https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800'],
+                amenities: ['wifi', 'ac', 'tv', 'hairdryer'],
                 status: 'available'
             }
         ];
 
         const defaultHeroMedia = [
-            {
-                id: 'h_1',
-                type: 'image',
-                url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600'
-            }
+            { id: 'h_1', type: 'image', url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600' }
         ];
 
         let heroMediaList = defaultHeroMedia;
@@ -699,24 +791,14 @@
         if (db) {
             db.ref('hero_media').on('value', snapshot => {
                 const data = snapshot.val();
-                if (data && ((Array.isArray(data) && data.length > 0) || Object.keys(data).length > 0)) {
-                    heroMediaList = typeof data === 'object' ? Object.values(data) : data;
-                } else {
-                    heroMediaList = defaultHeroMedia;
-                }
+                if (data) heroMediaList = Object.values(data);
                 renderHeroSlider();
-                if (document.getElementById('admin-panel').style.display === 'block') renderAdminHeroList();
             });
 
             db.ref('rooms').on('value', snapshot => {
                 const data = snapshot.val();
-                if (data && ((Array.isArray(data) && data.length > 0) || Object.keys(data).length > 0)) {
-                    rooms = typeof data === 'object' ? Object.values(data) : data;
-                } else {
-                    rooms = defaultRooms;
-                }
+                if (data) rooms = Object.values(data);
                 renderCustomerRooms();
-                if (document.getElementById('admin-panel').style.display === 'block') renderAdminRooms();
             });
 
             db.ref('contact_info').on('value', snapshot => {
@@ -724,6 +806,112 @@
                 if (data) contactInfo = data;
                 renderContactInfo();
             });
+        }
+
+        // ÖZELLİK BUTONLARINI OLUŞTURMA
+        function renderAmenitiesButtons() {
+            const container = document.getElementById('amenities-container');
+            if (!container) return;
+            container.innerHTML = '';
+            availableAmenities.forEach(item => {
+                const isSelected = selectedAmenities.includes(item.id);
+                const btn = document.createElement('div');
+                btn.className = `amenity-toggle-btn ${isSelected ? 'selected' : ''}`;
+                btn.innerText = item.label;
+                btn.onclick = () => toggleAmenity(item.id);
+                container.appendChild(btn);
+            });
+        }
+
+        function toggleAmenity(id) {
+            if (selectedAmenities.includes(id)) {
+                selectedAmenities = selectedAmenities.filter(a => a !== id);
+            } else {
+                selectedAmenities.push(id);
+            }
+            renderAmenitiesButtons();
+        }
+
+        // KIRPMA İŞLEMLERİ (CROPPER.JS)
+        function initCropProcess(input, target) {
+            const file = input.files[0];
+            if (!file) return;
+
+            cropTargetType = target;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imageTarget = document.getElementById('crop-image-target');
+                imageTarget.src = e.target.result;
+                document.getElementById('crop-modal').style.display = 'flex';
+
+                if (cropper) cropper.destroy();
+                cropper = new Cropper(imageTarget, {
+                    aspectRatio: target === 'hero' ? 16 / 9 : 4 / 3,
+                    viewMode: 1
+                });
+            };
+            reader.readAsDataURL(file);
+            input.value = ''; // Reset input
+        }
+
+        function cancelCrop() {
+            document.getElementById('crop-modal').style.display = 'none';
+            if (cropper) cropper.destroy();
+        }
+
+        async function applyCrop() {
+            if (!cropper) return;
+            const canvas = cropper.getCroppedCanvas({ width: 1200, height: 900 });
+            document.getElementById('crop-modal').style.display = 'none';
+
+            const loadingId = cropTargetType === 'hero' ? 'hero-loading' : 'room-loading';
+            document.getElementById(loadingId).style.display = 'block';
+
+            canvas.toBlob(async (blob) => {
+                try {
+                    const formData = new FormData();
+                    formData.append("image", blob);
+                    
+                    const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                        method: "POST",
+                        body: formData
+                    });
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        const url = data.data.url;
+                        if (cropTargetType === 'hero') {
+                            document.getElementById('hero-media-url').value = url;
+                        } else {
+                            currentRoomImages.push(url);
+                            renderRoomImagesPreview();
+                        }
+                    } else { alert("Resim yüklenemedi!"); }
+                } catch(e) {
+                    alert("Yükleme hatası: " + e.message);
+                } finally {
+                    document.getElementById(loadingId).style.display = 'none';
+                    if (cropper) cropper.destroy();
+                }
+            }, 'image/jpeg');
+        }
+
+        function renderRoomImagesPreview() {
+            const container = document.getElementById('room-images-preview');
+            container.innerHTML = '';
+            currentRoomImages.forEach((imgUrl, idx) => {
+                container.innerHTML += `
+                    <div class="preview-thumb-box">
+                        <img src="${imgUrl}">
+                        <button type="button" class="preview-thumb-del" onclick="removeRoomImage(${idx})">✕</button>
+                    </div>
+                `;
+            });
+        }
+
+        function removeRoomImage(idx) {
+            currentRoomImages.splice(idx, 1);
+            renderRoomImagesPreview();
         }
 
         function switchAdminTab(tabId, btn) {
@@ -734,12 +922,12 @@
         }
 
         function checkHash() {
-            const hash = window.location.hash;
-            if (hash === '#kutlu2020') {
+            if (window.location.hash === '#kutlu2020') {
                 const password = prompt("Lütfen Admin Panel Şifresini Giriniz:");
                 if (password === "353120") {
                     document.getElementById('admin-panel').style.display = 'block';
                     document.getElementById('customer-view').style.display = 'none';
+                    renderAmenitiesButtons();
                     renderAdminRooms();
                     renderAdminHeroList();
                     loadAdminContactForm();
@@ -748,9 +936,7 @@
                     history.replaceState(null, null, ' ');
                     showCustomerView();
                 }
-            } else {
-                showCustomerView();
-            }
+            } else { showCustomerView(); }
         }
 
         function closeAdminPanel() {
@@ -774,56 +960,6 @@
             checkHash();
         });
 
-        async function uploadToImgBB(file) {
-            const formData = new FormData();
-            formData.append("image", file);
-            
-            const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-                method: "POST",
-                body: formData
-            });
-            const data = await response.json();
-            if (data.success) {
-                return data.data.url;
-            } else {
-                throw new Error("Resim yüklenemedi!");
-            }
-        }
-
-        async function uploadHeroMediaAuto(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const loadingText = document.getElementById('hero-loading');
-            loadingText.style.display = 'block';
-
-            try {
-                const imageUrl = await uploadToImgBB(file);
-                document.getElementById('hero-media-url').value = imageUrl;
-                alert("Resim yüklendi!");
-            } catch (err) {
-                alert("Yükleme hatası: " + err.message);
-            } finally {
-                loadingText.style.display = 'none';
-            }
-        }
-
-        async function uploadRoomMediaAuto(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const loadingText = document.getElementById('room-loading');
-            loadingText.style.display = 'block';
-
-            try {
-                const imageUrl = await uploadToImgBB(file);
-                document.getElementById('admin-media-url').value = imageUrl;
-                alert("Oda resmi yüklendi!");
-            } catch (err) {
-                alert("Yükleme hatası: " + err.message);
-            } finally {
-                loadingText.style.display = 'none';
-            }
-        }
-
         function renderHeroSlider() {
             const container = document.getElementById('hero-slider-container');
             if (!container) return;
@@ -835,10 +971,7 @@
                 if (item.type === 'video') {
                     el = document.createElement('video');
                     el.src = item.url;
-                    el.autoplay = true;
-                    el.loop = true;
-                    el.muted = true;
-                    el.playsInline = true;
+                    el.autoplay = true; el.loop = true; el.muted = true; el.playsInline = true;
                 } else {
                     el = document.createElement('img');
                     el.src = item.url;
@@ -896,14 +1029,32 @@
             });
         }
 
+        // MÜŞTERİ ODA LİSTESİ (ÇOKLU FOTO SLIDER VE ETIKETLER İLE)
         function renderCustomerRooms() {
             const container = document.getElementById('rooms-container');
             if(!container) return;
             container.innerHTML = '';
+            
             rooms.forEach(room => {
-                const mediaTag = room.type === 'video' 
-                    ? `<video src="${room.media}" class="room-media" controls></video>`
-                    : `<img src="${room.media}" class="room-media" alt="${room.title}">`;
+                const roomImgs = room.images && room.images.length > 0 ? room.images : [room.media || 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800'];
+                
+                let slidesHtml = '';
+                roomImgs.forEach(img => {
+                    slidesHtml += `<img src="${img}" class="room-media-item" alt="${room.title}">`;
+                });
+
+                // Özellik rozetleri (Amenities)
+                let amenitiesHtml = '';
+                if (room.amenities && room.amenities.length > 0) {
+                    amenitiesHtml = '<div class="room-amenities-list">';
+                    room.amenities.forEach(amId => {
+                        const amObj = availableAmenities.find(a => a.id === amId);
+                        if(amObj) {
+                            amenitiesHtml += `<span class="amenity-badge">${amObj.label}</span>`;
+                        }
+                    });
+                    amenitiesHtml += '</div>';
+                }
 
                 const statusTag = room.status === 'available'
                     ? `<span class="room-status status-available">Müsait</span>`
@@ -916,16 +1067,19 @@
                 container.innerHTML += `
                     <div class="room-card">
                         <div class="room-media-box">
-                            ${mediaTag}
+                            <div class="room-slider-track">
+                                ${slidesHtml}
+                            </div>
                         </div>
                         <div class="room-info">
                             <div>
                                 <div class="room-title">${room.title}</div>
                                 ${statusTag}
-                                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 10px;">${room.desc}</p>
+                                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 6px;">${room.desc}</p>
+                                ${amenitiesHtml}
                             </div>
                             <div>
-                                <div style="font-weight: bold; color: var(--accent); margin-bottom: 10px;">${room.price} TL / Gece</div>
+                                <div style="font-weight: bold; color: var(--accent); margin: 10px 0;">${room.price} TL / Gece</div>
                                 ${btnTag}
                             </div>
                         </div>
@@ -995,25 +1149,43 @@
             const title = document.getElementById('admin-room-title').value;
             const desc = document.getElementById('admin-room-desc').value;
             const price = document.getElementById('admin-room-price').value;
-            const type = document.getElementById('admin-media-type').value;
             const status = document.getElementById('admin-room-status').value;
-            const media = document.getElementById('admin-media-url').value;
+
+            if (currentRoomImages.length === 0) {
+                return alert("Lütfen en az 1 tane fotoğraf yükleyin!");
+            }
+
+            const roomData = {
+                id: editId || 'r_' + Date.now(),
+                title,
+                desc,
+                price,
+                images: currentRoomImages,
+                amenities: selectedAmenities,
+                status
+            };
 
             if(editId) {
                 const index = rooms.findIndex(r => r.id === editId);
-                if(index !== -1) {
-                    rooms[index] = { id: editId, title, desc, price, type, media, status };
-                }
+                if(index !== -1) rooms[index] = roomData;
             } else {
-                rooms.push({ id: 'r_' + Date.now(), title, desc, price, type, media, status });
+                rooms.push(roomData);
             }
 
             if (db) db.ref('rooms').set(rooms);
-            document.getElementById('room-form').reset();
-            document.getElementById('edit-room-id').value = '';
+            resetRoomForm();
             renderAdminRooms();
             renderCustomerRooms();
-            alert("Oda kaydı güncellendi!");
+            alert("Oda başarıyla kaydedildi!");
+        }
+
+        function resetRoomForm() {
+            document.getElementById('room-form').reset();
+            document.getElementById('edit-room-id').value = '';
+            selectedAmenities = [];
+            currentRoomImages = [];
+            renderAmenitiesButtons();
+            renderRoomImagesPreview();
         }
 
         function editRoom(id) {
@@ -1023,9 +1195,13 @@
                 document.getElementById('admin-room-title').value = room.title;
                 document.getElementById('admin-room-desc').value = room.desc;
                 document.getElementById('admin-room-price').value = room.price;
-                document.getElementById('admin-media-type').value = room.type;
                 document.getElementById('admin-room-status').value = room.status;
-                document.getElementById('admin-media-url').value = room.media;
+
+                selectedAmenities = room.amenities || [];
+                currentRoomImages = room.images ? [...room.images] : (room.media ? [room.media] : []);
+
+                renderAmenitiesButtons();
+                renderRoomImagesPreview();
             }
         }
 
@@ -1043,24 +1219,16 @@
             const rawWhatsapp = contactInfo.whatsappRaw || (contactInfo.whatsapp || '').replace(/[^0-9]/g, '');
 
             if(document.getElementById('site-address')) document.getElementById('site-address').innerText = contactInfo.address;
-            if(document.getElementById('link-address')) {
-                document.getElementById('link-address').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`;
-            }
+            if(document.getElementById('link-address')) document.getElementById('link-address').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`;
 
             if(document.getElementById('site-phone')) document.getElementById('site-phone').innerText = contactInfo.phone;
-            if(document.getElementById('link-phone')) {
-                document.getElementById('link-phone').href = `tel:${cleanPhone}`;
-            }
+            if(document.getElementById('link-phone')) document.getElementById('link-phone').href = `tel:${cleanPhone}`;
 
             if(document.getElementById('site-whatsapp')) document.getElementById('site-whatsapp').innerText = contactInfo.whatsapp;
-            if(document.getElementById('link-whatsapp')) {
-                document.getElementById('link-whatsapp').href = `https://wa.me/${rawWhatsapp}`;
-            }
+            if(document.getElementById('link-whatsapp')) document.getElementById('link-whatsapp').href = `https://wa.me/${rawWhatsapp}`;
 
             if(document.getElementById('site-email')) document.getElementById('site-email').innerText = contactInfo.email;
-            if(document.getElementById('link-email')) {
-                document.getElementById('link-email').href = `mailto:${contactInfo.email}`;
-            }
+            if(document.getElementById('link-email')) document.getElementById('link-email').href = `mailto:${contactInfo.email}`;
         }
 
         function loadAdminContactForm() {

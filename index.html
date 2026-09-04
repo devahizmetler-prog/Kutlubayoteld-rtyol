@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kutlubay Otel | Dörtyol Hatay</title>
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <!-- Google Translate API -->
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <!-- Cropper.js (Görsel Kırpma Kütüphanesi) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
@@ -154,7 +157,7 @@
         .rooms-scroll-wrapper::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
 
         .room-card {
-            flex: 0 0 340px;
+            flex: 0 0 360px;
             background: var(--card-bg);
             border-radius: 12px;
             overflow: hidden;
@@ -167,7 +170,7 @@
         /* ODA ÇOKLU RESİM SLIDER'I */
         .room-media-box {
             width: 100%;
-            height: 220px;
+            height: 230px;
             background: #090d16;
             position: relative;
             overflow: hidden;
@@ -188,6 +191,17 @@
             height: 100%;
             object-fit: cover;
             scroll-snap-align: start;
+        }
+
+        .slider-hint {
+            position: absolute;
+            bottom: 8px; right: 8px;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            pointer-events: none;
         }
 
         .room-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
@@ -211,6 +225,8 @@
             flex-wrap: wrap;
             gap: 6px;
             margin: 10px 0;
+            max-height: 120px;
+            overflow-y: auto;
         }
 
         .amenity-badge {
@@ -365,7 +381,7 @@
         .admin-tab-content { display: none; }
         .admin-tab-content.active { display: block; }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .loading-text { color: var(--accent); font-size: 0.8rem; display: none; margin-top: 4px; }
+        .loading-text { color: var(--accent); font-size: 0.85rem; display: none; margin-top: 6px; font-weight: bold; }
 
         /* ÖZELLİK SEÇİM BUTONLARI (ADMIN) */
         .amenity-toggle-group {
@@ -373,13 +389,19 @@
             flex-wrap: wrap;
             gap: 8px;
             margin-top: 6px;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #0f172a;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #334155;
         }
 
         .amenity-toggle-btn {
-            background: #0f172a;
+            background: #1e293b;
             border: 1px solid #334155;
             color: #94a3b8;
-            padding: 6px 10px;
+            padding: 6px 12px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 0.8rem;
@@ -391,22 +413,23 @@
             background: var(--accent);
             color: #fff;
             border-color: var(--accent);
+            font-weight: bold;
         }
 
         /* YÜKLENEN GÖRSEL LİSTESİ (ADMIN) */
         .uploaded-images-preview {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
-            margin-top: 8px;
+            margin-top: 10px;
         }
         .preview-thumb-box {
             position: relative;
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             border-radius: 6px;
             overflow: hidden;
-            border: 1px solid var(--accent);
+            border: 2px solid var(--accent);
         }
         .preview-thumb-box img { width: 100%; height: 100%; object-fit: cover; }
         .preview-thumb-del {
@@ -416,37 +439,50 @@
             color: #fff;
             border: none;
             border-radius: 50%;
-            width: 18px; height: 18px;
-            font-size: 10px;
+            width: 20px; height: 20px;
+            font-size: 11px;
             cursor: pointer;
             display: flex; justify-content: center; align-items: center;
         }
 
-        /* CROPPER MODAL */
+        /* YENİLENMİŞ VE GENİŞLETİLMİŞ CROPPER MODAL */
         #crop-modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.95);
+            background: rgba(0,0,0,0.92);
             z-index: 20000;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
         }
         .crop-container {
-            max-width: 90vw;
-            max-height: 70vh;
+            width: 90vw;
+            max-width: 900px;
+            height: 65vh;
+            background: #000;
+            border-radius: 8px;
             overflow: hidden;
+            position: relative;
         }
-        .crop-container img { max-width: 100%; max-height: 70vh; }
+        .crop-container img { max-width: 100%; max-height: 100%; }
+
+        .crop-controls {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
 
         @media(max-width: 768px) {
             .hero-banner { height: 35vh; min-height: 260px; }
             .hotel-title { font-size: 1.5rem; }
             .admin-grid { grid-template-columns: 1fr; }
             .history-grid { grid-template-columns: 1fr; }
-            .room-card { flex: 0 0 85%; }
+            .room-card { flex: 0 0 88%; }
         }
     </style>
 </head>
@@ -473,6 +509,7 @@
             <h2 class="section-title">Odalarımız</h2>
             <div class="rooms-scroll-wrapper" id="rooms-container"></div>
 
+            <!-- HATAY'IN TARİHİ BÖLÜMÜ -->
             <div class="info-block">
                 <h2 class="section-title">Tarihin ve Kültürün Buluşma Noktası: Hatay</h2>
                 <div class="history-grid">
@@ -491,6 +528,7 @@
                 </div>
             </div>
 
+            <!-- İLETİŞİM & KONUM -->
             <div class="info-block" style="text-align: center; margin-top:30px;">
                 <h2 style="color: var(--accent); margin-bottom: 10px;">İletişim & Konum</h2>
                 <p style="color:var(--text-muted); font-size:0.85rem;">Bilgilere tıklayarak direkt arama yapabilir veya uygulamayı açabilirsiniz.</p>
@@ -532,6 +570,7 @@
         </div>
     </div>
 
+    <!-- REZERVASYON MODAL -->
     <div class="modal" id="booking-modal">
         <div class="modal-content">
             <h3 style="color: var(--accent); margin-bottom: 15px;" id="modal-room-title">Oda Rezervasyonu</h3>
@@ -579,6 +618,7 @@
         </div>
     </div>
 
+    <!-- ADMIN PANEL -->
     <div id="admin-panel">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #334155; padding-bottom:15px;">
             <h2 style="color:var(--accent);">Kutlubay Otel - Yönetim Paneli</h2>
@@ -597,6 +637,7 @@
             </button>
         </div>
 
+        <!-- TAB 1: ODA YÖNETİMİ -->
         <div id="rooms-tab" class="admin-tab-content active">
             <div class="admin-grid">
                 <div style="background:var(--card-bg); padding:20px; border-radius:10px;">
@@ -605,27 +646,28 @@
                         <input type="hidden" id="edit-room-id">
                         <div class="form-group">
                             <label>Oda Başlığı</label>
-                            <input type="text" id="admin-room-title" required placeholder="Örn: Süit Oda">
+                            <input type="text" id="admin-room-title" required placeholder="Örn: Süit Deniz Manzaralı Oda">
                         </div>
                         <div class="form-group">
                             <label>Açıklama</label>
-                            <textarea id="admin-room-desc" required></textarea>
+                            <textarea id="admin-room-desc" required placeholder="Oda hakkında detaylı bilgi..."></textarea>
                         </div>
                         <div class="form-group">
                             <label>Fiyat (TL/Gece)</label>
-                            <input type="number" id="admin-room-price" required>
+                            <input type="number" id="admin-room-price" required placeholder="1500">
                         </div>
 
+                        <!-- ZENGİN ODA ÖZELLİK SEÇENEKLERİ -->
                         <div class="form-group">
-                            <label>Oda Özellikleri (Tıklayarak Seçin):</label>
-                            <div class="amenity-toggle-group" id="amenities-container">
-                                </div>
+                            <label>Oda Özellikleri (Tıklayarak Seçebilirsiniz):</label>
+                            <div class="amenity-toggle-group" id="amenities-container"></div>
                         </div>
 
+                        <!-- ÇOKLU GÖRSEL YÜKLEME VE KIRPMA -->
                         <div class="form-group">
-                            <label>Oda Fotoğrafları Ekleyin (Kırparak Yüklenir)</label>
-                            <input type="file" accept="image/*" onchange="initCropProcess(this, 'room')" style="margin-bottom:6px;">
-                            <div id="room-loading" class="loading-text">⏳ Yükleniyor...</div>
+                            <label>Oda Fotoğrafları (Birden Fazla Seçebilirsiniz)</label>
+                            <input type="file" accept="image/*" multiple onchange="startMultipleCropProcess(this, 'room')" style="margin-bottom:6px;">
+                            <div id="room-loading" class="loading-text">⏳ Fotoğraf işlenip yükleniyor, lütfen bekleyin...</div>
                             <div class="uploaded-images-preview" id="room-images-preview"></div>
                         </div>
 
@@ -636,7 +678,8 @@
                                 <option value="full">Dolu / Rezerve</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn">Kaydet</button>
+                        <button type="submit" class="btn">Odayı Kaydet</button>
+                        <button type="button" class="btn" onclick="resetRoomForm()" style="background:#64748b; margin-top:8px;">Formu Temizle</button>
                     </form>
                 </div>
 
@@ -647,6 +690,7 @@
             </div>
         </div>
 
+        <!-- TAB 2: ARKA PLAN MEDYALARI -->
         <div id="hero-tab" class="admin-tab-content">
             <div style="background:var(--card-bg); padding:20px; border-radius:10px;">
                 <h3 style="color:var(--accent); margin-bottom:12px;">🖼️ Ana Ekran Arka Plan Medyaları</h3>
@@ -654,14 +698,14 @@
                     <form onsubmit="addHeroMedia(event)">
                         <div class="form-group">
                             <label>Medya Türü</label>
-                            <select id="hero-media-type" onchange="toggleHeroInputType(this.value)">
-                                <option value="image">Görsel (Resim - Kırpılarak Yüklenir)</option>
-                                <option value="video">Video (Link/Dosya)</option>
+                            <select id="hero-media-type">
+                                <option value="image">Görsel (Resim)</option>
+                                <option value="video">Video</option>
                             </select>
                         </div>
-                        <div class="form-group" id="hero-file-box">
+                        <div class="form-group">
                             <label>Galeriden Resim Seç & Kırp</label>
-                            <input type="file" accept="image/*,video/*" onchange="initCropProcess(this, 'hero')">
+                            <input type="file" accept="image/*,video/*" onchange="startSingleCropProcess(this, 'hero')">
                             <div id="hero-loading" class="loading-text">⏳ Yükleniyor...</div>
                         </div>
                         <div class="form-group">
@@ -678,6 +722,7 @@
             </div>
         </div>
 
+        <!-- TAB 3: İLETİŞİM AYARLARI -->
         <div id="contact-tab" class="admin-tab-content">
             <div style="background:var(--card-bg); padding:20px; border-radius:10px; max-width:600px;">
                 <h3 style="color:var(--accent); margin-bottom:12px;">⚙️ Otel İletişim Bilgilerini Düzenle</h3>
@@ -704,13 +749,17 @@
         </div>
     </div>
 
+    <!-- ESNEK & GENİŞ FOTOĞRAF KIRPMA (CROPPER) MODALI -->
     <div id="crop-modal">
-        <h3 style="color:var(--accent); margin-bottom:10px;">Görseli İstediğiniz Gibi Kırpın</h3>
+        <h3 style="color:var(--accent); margin-bottom:10px;" id="crop-title">Görseli Ayarlayın & Kırpın</h3>
         <div class="crop-container">
             <img id="crop-image-target" src="">
         </div>
-        <div style="margin-top:15px; display:flex; gap:10px;">
-            <button class="btn" onclick="applyCrop()" style="width:auto; padding:8px 25px;">Kırp ve Yükle</button>
+        <div class="crop-controls">
+            <button class="btn" onclick="setAspectRatio(NaN)" style="width:auto; padding:6px 12px; background:#334155;">Serbest Kırpma</button>
+            <button class="btn" onclick="setAspectRatio(4/3)" style="width:auto; padding:6px 12px; background:#334155;">4:3 Standart</button>
+            <button class="btn" onclick="setAspectRatio(16/9)" style="width:auto; padding:6px 12px; background:#334155;">16:9 Geniş</button>
+            <button class="btn" onclick="applyCrop()" style="width:auto; padding:8px 25px;">Onayla ve Yükle</button>
             <button class="btn" onclick="cancelCrop()" style="width:auto; background:#ef4444; padding:8px 20px;">İptal</button>
         </div>
     </div>
@@ -718,23 +767,34 @@
     <script>
         const IMGBB_API_KEY = "E4b0ac1b3c9aefeef5fb9f825287b0d8";
 
-        // HAZIR ODA ÖZELLİKLERİ LİSTESİ
+        // GELİŞTİRİLMİŞ GENİŞ ODA ÖZELLİKLERİ LİSTESİ
         const availableAmenities = [
             { id: 'wifi', label: '🛜 Ücretsiz Wi-Fi' },
             { id: 'ac', label: '❄️ Klima' },
             { id: 'tv', label: '📺 LED TV' },
-            { id: 'minibar', label: '🥤 Minibar' },
-            { id: 'jacuzzi', label: '🛁 Jakuzi' },
+            { id: 'jacuzzi', label: '🛁 Özel Jakuzi' },
             { id: 'balcony', label: '🌅 Balkon' },
+            { id: 'seaview', label: '🌊 Deniz Manzarası' },
+            { id: 'mountainview', label: '🏔️ Doğa/Dağ Manzarası' },
             { id: 'breakfast', label: '🍳 Kahvaltı Dahil' },
-            { id: 'roomservice', label: '🛎️ 24 Saat Oda Servisi' },
+            { id: 'allinclusive', label: '🍽️ Her Şey Dahil' },
+            { id: 'minibar', label: '🥤 Minibar' },
             { id: 'safe', label: '🔒 Çelik Kasa' },
-            { id: 'hairdryer', label: '💨 Saç Kurutma' }
+            { id: 'hairdryer', label: '💨 Saç Kurutma' },
+            { id: 'desk', label: '💻 Çalışma Masası' },
+            { id: 'soundproof', label: '🔇 Ses Yalıtımı' },
+            { id: 'robe', label: '🥋 Bornoz & Terlik' },
+            { id: 'coffee', label: '☕ Çay/Kahve Makinesi' },
+            { id: 'parking', label: '🅿️ Ücretsiz Otopark' },
+            { id: 'pool', label: '🏊 Havuz Erişimi' },
+            { id: 'roomservice', label: '🛎️ 24 Saat Oda Servisi' },
+            { id: 'nosmoking', label: '🚭 Sigara İçilmeyen Oda' }
         ];
 
         let selectedAmenities = [];
-        let currentRoomImages = []; // Seçilen odanın fotoğrafları
+        let currentRoomImages = []; // Seçilen odanın tüm fotoğrafları
         let cropper = null;
+        let cropQueue = []; // Çoklu yükleme kuyruğu
         let cropTargetType = ''; // 'room' veya 'hero'
 
         function googleTranslateElementInit() {
@@ -832,36 +892,66 @@
             renderAmenitiesButtons();
         }
 
-        // KIRPMA İŞLEMLERİ (CROPPER.JS)
-        function initCropProcess(input, target) {
-            const file = input.files[0];
-            if (!file) return;
-
+        // ÇOKLU/TEKLİ GÖRSEL KIRPMA YÖNETİMİ
+        function startMultipleCropProcess(input, target) {
+            if (!input.files || input.files.length === 0) return;
+            cropQueue = Array.from(input.files);
             cropTargetType = target;
+            processNextInCropQueue();
+            input.value = '';
+        }
+
+        function startSingleCropProcess(input, target) {
+            if (!input.files || input.files.length === 0) return;
+            cropQueue = [input.files[0]];
+            cropTargetType = target;
+            processNextInCropQueue();
+            input.value = '';
+        }
+
+        function processNextInCropQueue() {
+            if (cropQueue.length === 0) {
+                document.getElementById('crop-modal').style.display = 'none';
+                return;
+            }
+
+            const file = cropQueue[0];
             const reader = new FileReader();
             reader.onload = (e) => {
                 const imageTarget = document.getElementById('crop-image-target');
                 imageTarget.src = e.target.result;
+                
+                document.getElementById('crop-title').innerText = `Fotoğraf Kırpma (${cropQueue.length} Fotoğraf Kaldı)`;
                 document.getElementById('crop-modal').style.display = 'flex';
 
                 if (cropper) cropper.destroy();
                 cropper = new Cropper(imageTarget, {
-                    aspectRatio: target === 'hero' ? 16 / 9 : 4 / 3,
-                    viewMode: 1
+                    aspectRatio: NaN, // Serbest oran
+                    viewMode: 1,
+                    autoCropArea: 0.9,
+                    responsive: true
                 });
             };
             reader.readAsDataURL(file);
-            input.value = ''; // Reset input
+        }
+
+        function setAspectRatio(ratio) {
+            if (cropper) cropper.setAspectRatio(ratio);
         }
 
         function cancelCrop() {
-            document.getElementById('crop-modal').style.display = 'none';
+            cropQueue.shift(); // Şimdiki resmi atla
             if (cropper) cropper.destroy();
+            if (cropQueue.length > 0) {
+                processNextInCropQueue();
+            } else {
+                document.getElementById('crop-modal').style.display = 'none';
+            }
         }
 
         async function applyCrop() {
             if (!cropper) return;
-            const canvas = cropper.getCroppedCanvas({ width: 1200, height: 900 });
+            const canvas = cropper.getCroppedCanvas();
             document.getElementById('crop-modal').style.display = 'none';
 
             const loadingId = cropTargetType === 'hero' ? 'hero-loading' : 'room-loading';
@@ -892,8 +982,13 @@
                 } finally {
                     document.getElementById(loadingId).style.display = 'none';
                     if (cropper) cropper.destroy();
+                    
+                    cropQueue.shift(); // Sırada başka resim var mı bak
+                    if (cropQueue.length > 0) {
+                        processNextInCropQueue();
+                    }
                 }
-            }, 'image/jpeg');
+            }, 'image/jpeg', 0.9);
         }
 
         function renderRoomImagesPreview() {
@@ -1064,12 +1159,17 @@
                     ? `<button class="btn" onclick="openBookingModal('${room.title}')">Rezervasyon Yap</button>`
                     : `<button class="btn" style="background:#64748b; cursor:not-allowed;" disabled>Dolu</button>`;
 
+                const sliderHintTag = roomImgs.length > 1 
+                    ? `<div class="slider-hint">📷 1/${roomImgs.length} (Karakter Kaydırın)</div>` 
+                    : '';
+
                 container.innerHTML += `
                     <div class="room-card">
                         <div class="room-media-box">
                             <div class="room-slider-track">
                                 ${slidesHtml}
                             </div>
+                            ${sliderHintTag}
                         </div>
                         <div class="room-info">
                             <div>
@@ -1079,7 +1179,7 @@
                                 ${amenitiesHtml}
                             </div>
                             <div>
-                                <div style="font-weight: bold; color: var(--accent); margin: 10px 0;">${room.price} TL / Gece</div>
+                                <div style="font-weight: bold; color: var(--accent); margin: 10px 0; font-size: 1.1rem;">${room.price} TL / Gece</div>
                                 ${btnTag}
                             </div>
                         </div>
@@ -1128,11 +1228,12 @@
             if(!container) return;
             container.innerHTML = '';
             rooms.forEach(room => {
+                const imgCount = room.images ? room.images.length : (room.media ? 1 : 0);
                 container.innerHTML += `
                     <div style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px; border-radius:6px;">
                         <div>
                             <strong>${room.title}</strong> - ${room.price} TL
-                            <br><small style="color:var(--text-muted);">Durum: ${room.status === 'available' ? 'Müsait' : 'Dolu'}</small>
+                            <br><small style="color:var(--text-muted);">Fotoğraf Sayısı: ${imgCount} | Durum: ${room.status === 'available' ? 'Müsait' : 'Dolu'}</small>
                         </div>
                         <div>
                             <button class="btn" style="width:auto; padding:4px 8px; font-size:0.8rem;" onclick="editRoom('${room.id}')">Düzenle</button>
@@ -1152,7 +1253,7 @@
             const status = document.getElementById('admin-room-status').value;
 
             if (currentRoomImages.length === 0) {
-                return alert("Lütfen en az 1 tane fotoğraf yükleyin!");
+                return alert("Lütfen odaya en az 1 adet fotoğraf yükleyin!");
             }
 
             const roomData = {

@@ -15,9 +15,9 @@
 
     <style>
         :root {
-            --primary: #f8fafc; /* Beyaz / Çok açık gri arka plan */
-            --card-bg: #ffffff; /* Beyaz kartlar */
-            --accent: #c59b27; /* Altın / Bronz Aksan Rengi */
+            --primary: #f8fafc;
+            --card-bg: #ffffff;
+            --accent: #c59b27;
             --accent-hover: #a37f1e;
             --text-dark: #0f172a;
             --text-muted: #64748b;
@@ -26,522 +26,158 @@
             --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: var(--primary); color: var(--text-dark); overflow-x: hidden; }
 
-        body {
-            background-color: var(--primary);
-            color: var(--text-dark);
-            overflow-x: hidden;
-        }
-
-        /* HEADER & NAVIGATION */
+        /* NAVBAR */
         .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 25px;
-            background: #ffffff;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: var(--shadow-sm);
-            border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 25px; background: #ffffff; position: sticky; top: 0;
+            z-index: 1000; box-shadow: var(--shadow-sm); border-bottom: 1px solid var(--border-color);
         }
+        .brand-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text-dark); }
+        .brand-logo img { height: 42px; max-width: 150px; object-fit: contain; }
+        .brand-text { display: flex; flex-direction: column; }
+        .brand-title { font-size: 1.2rem; font-weight: 800; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; }
+        .brand-subtitle { font-size: 0.65rem; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; }
+        .nav-controls { display: flex; align-items: center; gap: 15px; }
+        #lang-selector { background: #f1f5f9; border: 1px solid var(--border-color); padding: 3px 6px; border-radius: 6px; }
+        .menu-icon { font-size: 1.6rem; cursor: pointer; color: var(--text-dark); padding: 5px; }
 
-        .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: var(--text-dark);
+        /* NAV DROPDOWN MENU */
+        .nav-menu-overlay {
+            display: none; position: fixed; top: 70px; right: 20px;
+            background: #ffffff; border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg); border-radius: 12px; padding: 15px;
+            z-index: 2000; width: 220px; flex-direction: column; gap: 10px;
         }
-
-        .brand-logo img {
-            height: 42px;
-            max-width: 150px;
-            object-fit: contain;
+        .nav-menu-overlay a {
+            text-decoration: none; color: var(--text-dark); font-weight: 600;
+            padding: 8px 12px; border-radius: 6px; transition: 0.2s; font-size: 0.95rem;
         }
-
-        .brand-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand-title {
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: var(--accent);
-            text-transform: uppercase;
-        }
-
-        .brand-subtitle {
-            font-size: 0.65rem;
-            letter-spacing: 1.5px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        .nav-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        #lang-selector {
-            background: #f1f5f9;
-            border: 1px solid var(--border-color);
-            padding: 3px 6px;
-            border-radius: 6px;
-        }
-
-        .menu-icon {
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-dark);
-        }
+        .nav-menu-overlay a:hover { background: #f1f5f9; color: var(--accent); }
 
         /* HERO SLIDER */
         .hero-banner {
-            height: 60vh;
-            min-height: 420px;
-            width: 100%;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
+            height: 60vh; min-height: 420px; width: 100%; position: relative;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 20px;
         }
-
-        .bg-slider {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1;
-        }
-
-        .bg-slide-media {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-
+        .bg-slider { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .bg-slide-media { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s ease-in-out; }
         .bg-slide-media.active { opacity: 1; }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(15,23,42,0.85) 100%); z-index: 2; }
+        .hero-content { z-index: 3; max-width: 800px; }
+        .hotel-title { font-size: 2.6rem; font-weight: 800; color: #ffffff; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 3px; }
+        .hero-subtitle { font-size: 1.1rem; color: #f1f5f9; margin-bottom: 25px; font-weight: 300; }
 
-        .hero-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(15,23,42,0.85) 100%);
-            z-index: 2;
-        }
-
-        .hero-content {
-            z-index: 3;
-            max-width: 800px;
-        }
-
-        .hotel-title {
-            font-size: 2.6rem;
-            font-weight: 800;
-            color: #ffffff;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-
-        .hero-subtitle {
-            font-size: 1.1rem;
-            color: #f1f5f9;
-            margin-bottom: 25px;
-            font-weight: 300;
-        }
-
-        /* HIZLI REZERVASYON ÇUBUĞU */
+        /* REZERVASYON ÇUBUĞU */
         .quick-booking-bar {
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 20px 25px;
-            width: 90%;
-            max-width: 950px;
-            margin: -45px auto 30px auto;
-            position: relative;
-            z-index: 10;
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
-            justify-content: space-between;
+            background: #ffffff; border: 1px solid var(--border-color); border-radius: 14px;
+            padding: 20px 25px; width: 90%; max-width: 950px; margin: -45px auto 30px auto;
+            position: relative; z-index: 10; box-shadow: var(--shadow-lg); display: flex;
+            flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between;
         }
-
-        .qb-item {
-            flex: 1;
-            min-width: 150px;
-        }
-
-        .qb-item label {
-            display: block;
-            font-size: 0.75rem;
-            color: var(--accent);
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .qb-item input, .qb-item select {
-            width: 100%;
-            background: #f8fafc;
-            border: 1px solid var(--border-color);
-            color: var(--text-dark);
-            padding: 10px 12px;
-            border-radius: 8px;
-            outline: none;
-            font-weight: 500;
-        }
-
+        .qb-item { flex: 1; min-width: 150px; }
+        .qb-item label { display: block; font-size: 0.75rem; color: var(--accent); margin-bottom: 6px; text-transform: uppercase; font-weight: 700; }
+        .qb-item input, .qb-item select { width: 100%; background: #f8fafc; border: 1px solid var(--border-color); color: var(--text-dark); padding: 10px 12px; border-radius: 8px; outline: none; font-weight: 500; }
         .btn-gold {
-            background: var(--accent);
-            color: #ffffff;
-            font-weight: bold;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            width: 100%;
-            box-shadow: 0 4px 10px rgba(197, 155, 39, 0.3);
+            background: var(--accent); color: #ffffff; font-weight: bold; border: none;
+            padding: 12px 20px; border-radius: 8px; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 1px; width: 100%; box-shadow: 0 4px 10px rgba(197, 155, 39, 0.3);
         }
+        .btn-gold:hover { background: var(--accent-hover); transform: translateY(-1px); }
 
-        .btn-gold:hover {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
-        }
+        /* GENEL CONTAINER & BAŞLIKLAR */
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .section-title { text-align: center; font-size: 2rem; color: var(--text-dark); margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; position: relative; }
+        .section-title::after { content: ''; display: block; width: 60px; height: 3px; background: var(--accent); margin: 8px auto 0 auto; border-radius: 2px; }
 
         /* ODA LİSTESİ */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            color: var(--text-dark);
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-weight: 800;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background: var(--accent);
-            margin: 8px auto 0 auto;
-            border-radius: 2px;
-        }
-
-        .rooms-scroll-wrapper {
-            display: flex;
-            gap: 24px;
-            overflow-x: auto;
-            padding-bottom: 20px;
-            scroll-snap-type: x mandatory;
-        }
-
+        .rooms-scroll-wrapper { display: flex; gap: 24px; overflow-x: auto; padding-bottom: 20px; scroll-snap-type: x mandatory; }
         .rooms-scroll-wrapper::-webkit-scrollbar { height: 6px; }
         .rooms-scroll-wrapper::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
-
-        .room-card {
-            flex: 0 0 350px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            overflow: hidden;
-            scroll-snap-align: start;
-            display: flex;
-            flex-direction: column;
-            box-shadow: var(--shadow-sm);
-            transition: 0.3s;
-        }
-
-        .room-card:hover {
-            box-shadow: var(--shadow-lg);
-            transform: translateY(-3px);
-        }
-
-        .room-media-box {
-            width: 100%;
-            height: 230px;
-            background: #f1f5f9;
-            position: relative;
-        }
-
-        .room-slider-track {
-            display: flex;
-            width: 100%; height: 100%;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scrollbar-width: none;
-        }
+        .room-card { flex: 0 0 350px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; overflow: hidden; scroll-snap-align: start; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); transition: 0.3s; }
+        .room-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+        .room-media-box { width: 100%; height: 230px; background: #f1f5f9; position: relative; }
+        .room-slider-track { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
         .room-slider-track::-webkit-scrollbar { display: none; }
-
-        .room-media-item {
-            flex: 0 0 100%;
-            height: 100%;
-            object-fit: cover;
-            scroll-snap-align: start;
-        }
-
-        .room-info {
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
+        .room-media-item { flex: 0 0 100%; height: 100%; object-fit: cover; scroll-snap-align: start; }
+        .room-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .room-title { font-size: 1.25rem; margin-bottom: 8px; color: var(--text-dark); font-weight: 700; }
-
-        .room-status {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
+        .room-status { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; margin-bottom: 10px; }
         .status-available { background: #dcfce7; color: #15803d; }
         .status-full { background: #fee2e2; color: #b91c1c; }
+        .room-amenities-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; max-height: 100px; overflow-y: auto; }
+        .amenity-badge { background: #f1f5f9; border: 1px solid var(--border-color); color: var(--text-dark); font-size: 0.72rem; padding: 4px 8px; border-radius: 6px; font-weight: 500; }
 
-        .room-amenities-list {
-            display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; max-height: 100px; overflow-y: auto;
-        }
+        /* HATAY/DÖRTYOL TARİH BÖLÜMÜ VE FOTO KOLAJI */
+        .history-section { background: #ffffff; border: 1px solid var(--border-color); border-radius: 14px; padding: 40px 30px; margin-top: 50px; box-shadow: var(--shadow-sm); }
+        .history-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 35px; align-items: center; margin-top: 25px; }
+        .collage-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .collage-item { width: 100%; height: 180px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); }
+        .collage-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+        .collage-item:hover img { transform: scale(1.06); }
 
-        .amenity-badge {
-            background: #f1f5f9;
-            border: 1px solid var(--border-color);
-            color: var(--text-dark);
-            font-size: 0.72rem;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-weight: 500;
-        }
-
-        /* HAKKIMIZDA BÖLÜMÜ */
-        .about-section {
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            padding: 40px 30px;
-            border-radius: 14px;
-            margin-top: 50px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 35px;
-            align-items: center;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .about-img-box {
-            width: 100%;
-            height: 320px;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .about-img-box img {
-            width: 100%; height: 100%; object-fit: cover;
-        }
-
-        .about-text h3 {
-            color: var(--accent);
-            font-size: 1.6rem;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-
-        .about-text p {
-            color: var(--text-muted);
-            font-size: 0.98rem;
-            line-height: 1.8;
-            white-space: pre-line;
-        }
+        /* HAKKIMIZDA */
+        .about-section { background: #ffffff; border: 1px solid var(--border-color); padding: 40px 30px; border-radius: 14px; margin-top: 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 35px; align-items: center; box-shadow: var(--shadow-sm); }
+        .about-img-box { width: 100%; height: 320px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); }
+        .about-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .about-text h3 { color: var(--accent); font-size: 1.6rem; margin-bottom: 15px; font-weight: 700; }
+        .about-text p { color: var(--text-muted); font-size: 0.98rem; line-height: 1.8; white-space: pre-line; }
 
         /* FOOTER */
-        .footer {
-            background: #0f172a;
-            color: #ffffff;
-            border-top: 1px solid var(--border-color);
-            padding: 50px 20px 25px 20px;
-            margin-top: 60px;
-        }
-
-        .footer-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 35px;
-            margin-bottom: 35px;
-        }
-
-        .footer-col h4 {
-            color: var(--accent);
-            margin-bottom: 18px;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
-        }
-
+        .footer { background: #0f172a; color: #ffffff; border-top: 1px solid var(--border-color); padding: 50px 20px 25px 20px; margin-top: 60px; }
+        .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 35px; margin-bottom: 35px; }
+        .footer-col h4 { color: var(--accent); margin-bottom: 18px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
         .footer-col ul { list-style: none; }
         .footer-col ul li { margin-bottom: 10px; }
-        .footer-col ul li a {
-            color: #94a3b8;
-            text-decoration: none;
-            transition: 0.2s;
-            font-size: 0.92rem;
-        }
+        .footer-col ul li a { color: #94a3b8; text-decoration: none; transition: 0.2s; font-size: 0.92rem; }
         .footer-col ul li a:hover { color: var(--accent); }
-
-        .qr-box {
-            background: #fff;
-            padding: 10px;
-            width: 110px;
-            height: 110px;
-            border-radius: 8px;
-            margin-top: 12px;
-        }
-        .qr-box img { width: 100%; height: 100%; }
-
-        .footer-bottom {
-            text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 25px;
-            color: #64748b;
-            font-size: 0.85rem;
-        }
+        .qr-box { background: #fff; padding: 8px; width: 110px; height: 110px; border-radius: 8px; margin-top: 12px; border: 1px solid var(--border-color); }
+        .qr-box img { width: 100%; height: 100%; object-fit: contain; }
+        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; color: #64748b; font-size: 0.85rem; }
 
         /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(4px);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-        }
-
-        .modal-content {
-            background: #ffffff;
-            padding: 25px;
-            border-radius: 12px;
-            max-width: 480px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border-color);
-        }
-
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 9999; justify-content: center; align-items: center; padding: 15px; }
+        .modal-content { background: #ffffff; padding: 25px; border-radius: 12px; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-size: 0.85rem; color: var(--text-dark); margin-bottom: 6px; font-weight: 600; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: #f8fafc; color: var(--text-dark); outline: none;
-        }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: #f8fafc; color: var(--text-dark); outline: none; }
 
         /* ADMIN PANEL */
-        #admin-panel {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #0f172a;
-            color: #fff;
-            z-index: 10000;
-            overflow-y: auto;
-            padding: 25px;
-        }
-
-        .admin-nav {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 12px;
-            overflow-x: auto;
-        }
-
-        .admin-tab-btn {
-            background: #1e293b;
-            color: #94a3b8;
-            border: 1px solid #334155;
-            padding: 10px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
+        #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0f172a; color: #fff; z-index: 10000; overflow-y: auto; padding: 25px; }
+        .admin-nav { display: flex; gap: 10px; margin: 20px 0; border-bottom: 1px solid #334155; padding-bottom: 12px; overflow-x: auto; }
+        .admin-tab-btn { background: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; white-space: nowrap; }
         .admin-tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
         .admin-tab-content { display: none; }
         .admin-tab-content.active { display: block; }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .loading-text { color: var(--accent); font-size: 0.85rem; display: none; margin-top: 6px; font-weight: bold; }
-
-        .amenity-toggle-group {
-            display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; max-height: 180px; overflow-y: auto; background: #1e293b; padding: 12px; border-radius: 8px; border: 1px solid #334155;
-        }
-
-        .amenity-toggle-btn {
-            background: #0f172a; border: 1px solid #334155; color: #94a3b8; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;
-        }
-
+        .amenity-toggle-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; max-height: 180px; overflow-y: auto; background: #1e293b; padding: 12px; border-radius: 8px; border: 1px solid #334155; }
+        .amenity-toggle-btn { background: #0f172a; border: 1px solid #334155; color: #94a3b8; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
         .amenity-toggle-btn.selected { background: var(--accent); color: #fff; font-weight: bold; }
-
         .uploaded-images-preview { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
         .preview-thumb-box { position: relative; width: 75px; height: 75px; border-radius: 6px; overflow: hidden; border: 1px solid var(--accent); }
         .preview-thumb-box img { width: 100%; height: 100%; object-fit: cover; }
         .preview-thumb-del { position: absolute; top: 2px; right: 2px; background: rgba(239, 68, 68, 0.9); color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; cursor: pointer; }
 
         /* CROPPER MODAL */
-        #crop-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 20000; flex-direction: column; justify-content: center; align-items: center; padding: 15px;
-        }
+        #crop-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 20000; flex-direction: column; justify-content: center; align-items: center; padding: 15px; }
         .crop-container { width: 90vw; max-width: 850px; height: 60vh; background: #000; border-radius: 8px; overflow: hidden; }
 
         @media(max-width: 768px) {
             .hero-banner { height: 45vh; }
             .hotel-title { font-size: 1.8rem; }
-            .about-section { grid-template-columns: 1fr; }
-            .admin-grid { grid-template-columns: 1fr; }
+            .history-grid, .about-section, .admin-grid { grid-template-columns: 1fr; }
             .room-card { flex: 0 0 88%; }
+            .collage-item { height: 140px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ÜST MENÜ (NAVBAR) -->
+    <!-- NAVBAR -->
     <nav class="navbar">
         <a href="#" class="brand-logo" id="brand-logo-container">
             <img id="site-logo-img" src="" alt="Logo" style="display:none;">
@@ -554,9 +190,18 @@
             <div id="lang-selector">
                 <div id="google_translate_element"></div>
             </div>
-            <div class="menu-icon" onclick="window.location.hash='kutlubay'">☰</div>
+            <!-- YENİ TIKLANABİLİR MENÜ BUTONU -->
+            <div class="menu-icon" onclick="toggleNavMenu()">☰</div>
         </div>
     </nav>
+
+    <!-- NAV POPUP MENÜSÜ -->
+    <div class="nav-menu-overlay" id="nav-dropdown-menu">
+        <a href="#section-rooms" onclick="toggleNavMenu()">🏨 Odalarımız</a>
+        <a href="#section-history" onclick="toggleNavMenu()">🏛️ Hatay & Dörtyol Tarihi</a>
+        <a href="#section-about" onclick="toggleNavMenu()">ℹ️ Hakkımızda</a>
+        <a href="#section-contact" onclick="toggleNavMenu()">📞 İletişim</a>
+    </div>
 
     <div id="customer-view">
         <!-- KARŞILAMA BANNERI -->
@@ -569,7 +214,7 @@
             </div>
         </header>
 
-        <!-- HIZLI REZERVASYON ARAMA ÇUBUĞU -->
+        <!-- HIZLI REZERVASYON ÇUBUĞU -->
         <div class="quick-booking-bar">
             <div class="qb-item">
                 <label>Giriş Tarihi</label>
@@ -596,11 +241,28 @@
 
         <div class="container">
             <!-- ODALARIMIZ -->
-            <h2 class="section-title">Odalarımız</h2>
-            <div class="rooms-scroll-wrapper" id="rooms-container"></div>
+            <div id="section-rooms">
+                <h2 class="section-title">Odalarımız</h2>
+                <div class="rooms-scroll-wrapper" id="rooms-container"></div>
+            </div>
 
-            <!-- DİNAMİK HAKKIMIZDA BÖLÜMÜ -->
-            <div class="about-section">
+            <!-- TARİH & KÜLTÜR BÖLÜMÜ (HATAY VE DÖRTYOL TARİHİ KOLAJI) -->
+            <div class="history-section" id="section-history">
+                <h2 class="section-title" id="display-history-title">Tarih & Kültür Mozaiği: Hatay & Dörtyol</h2>
+                <div class="history-grid">
+                    <div class="collage-container" id="history-collage-grid"></div>
+                    <div>
+                        <p id="display-history-desc" style="color:var(--text-muted); font-size:1rem; line-height:1.8; white-space:pre-line;">
+                            Hatay, binlerce yıllık geçmişi, farklı medeniyetlerin izlerini taşıyan hoşgörü kültürü ve zengin gastronomi mirası ile dünyanın sayılı tarih merkezlerinden biridir. 
+
+                            Milli Mücadele'de "İlk Kurşun"un atıldığı Dörtyol ilçemiz ise, narenciye bahçeleri, Amanos Dağları'nın eşsiz doğası ve tarihi direniş ruhu ile bu özel coğrafyanın gurur kaynağıdır. Geçmişten günümüze uzanan bu eşsiz mirası keşfetmek için sizleri Kutlubay Otel konforunda ağırlamaktan onur duyuyoruz.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HAKKIMIZDA BÖLÜMÜ -->
+            <div class="about-section" id="section-about">
                 <div class="about-img-box">
                     <img id="display-about-img" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800" alt="Hakkımızda Fotoğrafı">
                 </div>
@@ -613,7 +275,7 @@
             </div>
 
             <!-- İLETİŞİM & LOKASYON -->
-            <div style="margin-top: 50px; text-align: center;">
+            <div id="section-contact" style="margin-top: 50px; text-align: center;">
                 <h2 class="section-title">İletişim & Lokasyon</h2>
                 <div style="display:flex; flex-wrap:wrap; gap:15px; justify-content:center; margin-top:25px;">
                     <a id="link-phone" href="#" class="btn-gold" style="width:auto; text-decoration:none; display:inline-block;">📞 <span id="site-phone">+90 (533) 480 10 87</span></a>
@@ -628,10 +290,10 @@
                 <div class="footer-col">
                     <h4>Site Haritası</h4>
                     <ul>
-                        <li><a href="#">Odalarımız</a></li>
-                        <li><a href="#">Hakkımızda</a></li>
-                        <li><a href="#">İletişim</a></li>
-                        <li><a href="#">Galeri</a></li>
+                        <li><a href="#section-rooms">Odalarımız</a></li>
+                        <li><a href="#section-history">Hatay & Dörtyol Tarihi</a></li>
+                        <li><a href="#section-about">Hakkımızda</a></li>
+                        <li><a href="#section-contact">İletişim</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -640,10 +302,10 @@
                     <p style="color:#94a3b8; font-size:0.9rem; margin-top:5px;" id="site-email">info@kutlubayotel.com</p>
                 </div>
                 <div class="footer-col">
-                    <h4>Bizi Takip Edin</h4>
-                    <p style="color:#94a3b8; font-size:0.85rem;">Mobil Rezervasyon QR Kod:</p>
+                    <h4>Mobil Bağlantı & QR</h4>
+                    <p style="color:#94a3b8; font-size:0.85rem;">Mobil Hızlı Erişim QR Kodu:</p>
                     <div class="qr-box">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://kutlubayotel.com" alt="QR Kodu">
+                        <img id="display-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://kutlubayotel.com" alt="QR Kodu">
                     </div>
                 </div>
             </div>
@@ -699,9 +361,10 @@
         <div class="admin-nav">
             <button class="admin-tab-btn active" onclick="switchAdminTab('rooms-tab', this)">🏨 Odaları Yönet</button>
             <button class="admin-tab-btn" onclick="switchAdminTab('brand-tab', this)">🏷️ Logo & Marka Ayarları</button>
+            <button class="admin-tab-btn" onclick="switchAdminTab('history-tab', this)">🏛️ Hatay/Dörtyol Tarihi</button>
             <button class="admin-tab-btn" onclick="switchAdminTab('about-tab', this)">ℹ️ Hakkımızda Düzenle</button>
             <button class="admin-tab-btn" onclick="switchAdminTab('hero-tab', this)">🖼️ Arka Plan Medyaları</button>
-            <button class="admin-tab-btn" onclick="switchAdminTab('contact-tab', this)">⚙️ İletişim Ayarları</button>
+            <button class="admin-tab-btn" onclick="switchAdminTab('contact-tab', this)">⚙️ İletişim & QR Ayarları</button>
         </div>
 
         <!-- TAB 1: ODA YÖNETİMİ -->
@@ -755,7 +418,7 @@
             </div>
         </div>
 
-        <!-- TAB 2: LOGO & MARKA AYARLARI (YENİ EKLENDİ) -->
+        <!-- TAB 2: LOGO & MARKA AYARLARI -->
         <div id="brand-tab" class="admin-tab-content">
             <div style="background:#1e293b; padding:20px; border-radius:10px; max-width:650px;">
                 <h3 style="color:var(--accent); margin-bottom:12px;">🏷️ Logo ve Üst Başlık Ayarları</h3>
@@ -780,7 +443,31 @@
             </div>
         </div>
 
-        <!-- TAB 3: HAKKIMIZDA DÜZENLEME -->
+        <!-- TAB 3: HATAY/DÖRTYOL TARİH BÖLÜMÜ YÖNETİMİ (YENİ) -->
+        <div id="history-tab" class="admin-tab-content">
+            <div style="background:#1e293b; padding:20px; border-radius:10px; max-width:800px;">
+                <h3 style="color:var(--accent); margin-bottom:12px;">🏛️ Hatay & Dörtyol Tarihi Bölümü</h3>
+                <form onsubmit="saveHistoryInfo(event)">
+                    <div class="form-group">
+                        <label style="color:#fff;">Bölüm Başlığı</label>
+                        <input type="text" id="admin-history-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label style="color:#fff;">Tarihçe Metni / Açıklama</label>
+                        <textarea id="admin-history-desc" rows="6" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label style="color:#fff;">Kolaj Görselleri Yükle (4 Tane Seçebilirsiniz)</label>
+                        <input type="file" accept="image/*" multiple onchange="startMultipleCropProcess(this, 'history')">
+                        <div id="history-loading" class="loading-text">⏳ Kolaj Resimleri Yükleniyor...</div>
+                        <div class="uploaded-images-preview" id="history-images-preview"></div>
+                    </div>
+                    <button type="submit" class="btn-gold">Tarihçe Bölümünü Güncelle</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- TAB 4: HAKKIMIZDA DÜZENLEME -->
         <div id="about-tab" class="admin-tab-content">
             <div style="background:#1e293b; padding:20px; border-radius:10px; max-width:700px;">
                 <h3 style="color:var(--accent); margin-bottom:12px;">ℹ️ Hakkımızda Bölümü Ayarları</h3>
@@ -805,7 +492,7 @@
             </div>
         </div>
 
-        <!-- TAB 4: ARKA PLAN MEDYALARI -->
+        <!-- TAB 5: ARKA PLAN MEDYALARI -->
         <div id="hero-tab" class="admin-tab-content">
             <div style="background:#1e293b; padding:20px; border-radius:10px;">
                 <h3 style="color:var(--accent); margin-bottom:12px;">🖼️ Arka Plan Medyaları</h3>
@@ -837,10 +524,10 @@
             </div>
         </div>
 
-        <!-- TAB 5: İLETİŞİM AYARLARI -->
+        <!-- TAB 6: İLETİŞİM & QR AYARLARI -->
         <div id="contact-tab" class="admin-tab-content">
             <div style="background:#1e293b; padding:20px; border-radius:10px; max-width:600px;">
-                <h3 style="color:var(--accent); margin-bottom:12px;">⚙️ Otel İletişim Bilgileri</h3>
+                <h3 style="color:var(--accent); margin-bottom:12px;">⚙️ Otel İletişim & QR Kod Ayarları</h3>
                 <form onsubmit="saveContactInfo(event)">
                     <div class="form-group">
                         <label style="color:#fff;">Adres</label>
@@ -858,7 +545,19 @@
                         <label style="color:#fff;">E-Posta Adresi</label>
                         <input type="email" id="admin-contact-email" required>
                     </div>
-                    <button type="submit" class="btn-gold">İletişim Bilgilerini Güncelle</button>
+                    <hr style="border-color:#334155; margin:15px 0;">
+                    <div class="form-group">
+                        <label style="color:#fff;">QR Kod Resmi Yükle & Kırp (Özel QR Fotoğrafınız Var ise)</label>
+                        <input type="file" accept="image/*" onchange="startSingleCropProcess(this, 'qr')">
+                        <div id="qr-loading" class="loading-text">⏳ QR Kod Yükleniyor...</div>
+                        <input type="hidden" id="admin-qr-img-url">
+                    </div>
+                    <div class="form-group">
+                        <label style="color:#fff;">Veya Otomatik QR İçin Web Linki Girin</label>
+                        <input type="text" id="admin-qr-link" placeholder="https://kutlubayotel.com">
+                    </div>
+                    <div id="qr-img-preview-box" style="margin-bottom:15px;"></div>
+                    <button type="submit" class="btn-gold">Bilgileri ve QR Kodu Güncelle</button>
                 </form>
             </div>
         </div>
@@ -873,7 +572,7 @@
         <div style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
             <button class="btn-gold" onclick="setAspectRatio(NaN)" style="width:auto; padding:6px 12px; background:#334155; color:#fff;">Serbest Kırpma</button>
             <button class="btn-gold" onclick="setAspectRatio(4/3)" style="width:auto; padding:6px 12px; background:#334155; color:#fff;">4:3 Oran</button>
-            <button class="btn-gold" onclick="setAspectRatio(16/9)" style="width:auto; padding:6px 12px; background:#334155; color:#fff;">16:9 Oran</button>
+            <button class="btn-gold" onclick="setAspectRatio(1/1)" style="width:auto; padding:6px 12px; background:#334155; color:#fff;">1:1 Kare</button>
             <button class="btn-gold" onclick="applyCrop()" style="width:auto; padding:8px 25px;">Onayla ve Yükle</button>
             <button class="btn-gold" onclick="cancelCrop()" style="width:auto; background:#ef4444; color:#fff; padding:8px 20px;">İptal</button>
         </div>
@@ -907,9 +606,10 @@
 
         let selectedAmenities = [];
         let currentRoomImages = [];
+        let currentHistoryImages = [];
         let cropper = null;
         let cropQueue = [];
-        let cropTargetType = ''; // 'room', 'hero', 'about' veya 'brand'
+        let cropTargetType = ''; 
 
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
@@ -917,6 +617,12 @@
                 includedLanguages: 'tr,en,de,ru,ar,fr,es',
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE
             }, 'google_translate_element');
+        }
+
+        function toggleNavMenu() {
+            const menu = document.getElementById('nav-dropdown-menu');
+            if (menu.style.display === 'flex') menu.style.display = 'none';
+            else menu.style.display = 'flex';
         }
 
         const firebaseConfig = {
@@ -943,10 +649,17 @@
             { id: 'h_1', type: 'image', url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600' }
         ];
 
-        let brandInfo = {
-            title: "KUTLUBAY",
-            subtitle: "HOTEL & RESORT",
-            logoUrl: ""
+        let brandInfo = { title: "KUTLUBAY", subtitle: "HOTEL & RESORT", logoUrl: "" };
+
+        let historyInfo = {
+            title: "Tarih & Kültür Mozaiği: Hatay & Dörtyol",
+            desc: "Hatay, binlerce yıllık geçmişi, farklı medeniyetlerin izlerini taşıyan hoşgörü kültürü ve zengin gastronomi mirası ile dünyanın sayılı tarih merkezlerinden biridir.\n\nMilli Mücadele'de 'İlk Kurşun'un atıldığı Dörtyol ilçemiz ise, narenciye bahçeleri, Amanos Dağları'nın eşsiz doğası ve tarihi direniş ruhu ile bu özel coğrafyanın gurur kaynağıdır. Geçmişten günümüze uzanan bu eşsiz mirası keşfetmek için sizleri Kutlubay Otel konforunda ağırlamaktan onur duyuyoruz.",
+            images: [
+                "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=600",
+                "https://images.unsplash.com/photo-1541971875076-8f970d573be6?w=600",
+                "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600",
+                "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600"
+            ]
         };
 
         let aboutInfo = {
@@ -960,7 +673,9 @@
             phone: "+90 (533) 480 10 87",
             whatsapp: "+90 505 479 93 93",
             whatsappRaw: "905054799393",
-            email: "info@kutlubayotel.com"
+            email: "info@kutlubayotel.com",
+            qrUrl: "",
+            qrLink: "https://kutlubayotel.com"
         };
 
         let sliderInterval = null;
@@ -982,6 +697,12 @@
                 const data = snapshot.val();
                 if (data) brandInfo = data;
                 renderBrandInfo();
+            });
+
+            db.ref('history_info').on('value', snapshot => {
+                const data = snapshot.val();
+                if (data) historyInfo = data;
+                renderHistoryInfo();
             });
 
             db.ref('about_info').on('value', snapshot => {
@@ -1013,11 +734,62 @@
             }
         }
 
+        function renderHistoryInfo() {
+            if(document.getElementById('display-history-title')) document.getElementById('display-history-title').innerText = historyInfo.title || "Hatay & Dörtyol Tarihi";
+            if(document.getElementById('display-history-desc')) document.getElementById('display-history-desc').innerText = historyInfo.desc || "";
+            
+            const grid = document.getElementById('history-collage-grid');
+            if(grid) {
+                grid.innerHTML = '';
+                const imgs = historyInfo.images || [];
+                imgs.forEach(url => {
+                    grid.innerHTML += `<div class="collage-item"><img src="${url}" alt="Hatay Tarihi Görsel"></div>`;
+                });
+            }
+        }
+
+        function loadAdminHistoryForm() {
+            document.getElementById('admin-history-title').value = historyInfo.title || '';
+            document.getElementById('admin-history-desc').value = historyInfo.desc || '';
+            currentHistoryImages = historyInfo.images ? [...historyInfo.images] : [];
+            renderHistoryImagesPreview();
+        }
+
+        function renderHistoryImagesPreview() {
+            const container = document.getElementById('history-images-preview');
+            if (!container) return;
+            container.innerHTML = '';
+            currentHistoryImages.forEach((imgUrl, idx) => {
+                container.innerHTML += `
+                    <div class="preview-thumb-box">
+                        <img src="${imgUrl}">
+                        <button type="button" class="preview-thumb-del" onclick="removeHistoryImage(${idx})">✕</button>
+                    </div>
+                `;
+            });
+        }
+
+        function removeHistoryImage(idx) {
+            currentHistoryImages.splice(idx, 1);
+            renderHistoryImagesPreview();
+        }
+
+        function saveHistoryInfo(e) {
+            e.preventDefault();
+            historyInfo = {
+                title: document.getElementById('admin-history-title').value,
+                desc: document.getElementById('admin-history-desc').value,
+                images: currentHistoryImages
+            };
+            if(db) db.ref('history_info').set(historyInfo);
+            renderHistoryInfo();
+            alert("Hatay & Dörtyol Tarihi bölümü başarıyla güncellendi!");
+        }
+
         function loadAdminBrandForm() {
             document.getElementById('admin-brand-title').value = brandInfo.title || 'KUTLUBAY';
             document.getElementById('admin-brand-subtitle').value = brandInfo.subtitle || 'HOTEL & RESORT';
             document.getElementById('admin-brand-logo-url').value = brandInfo.logoUrl || '';
-            
             renderBrandLogoPreview();
         }
 
@@ -1028,11 +800,9 @@
             if(logoUrl) {
                 previewBox.innerHTML = `
                     <img src="${logoUrl}" style="height:50px; background:#fff; padding:4px; border-radius:4px; border:1px solid #cbd5e1;">
-                    <button type="button" class="btn-gold" style="width:auto; background:#ef4444; color:#fff; padding:4px 10px; font-size:0.8rem;" onclick="removeBrandLogo()">Logoyu Kaldır / Sil</button>
+                    <button type="button" class="btn-gold" style="width:auto; background:#ef4444; color:#fff; padding:4px 10px; font-size:0.8rem;" onclick="removeBrandLogo()">Logoyu Kaldır</button>
                 `;
-            } else {
-                previewBox.innerHTML = `<span style="color:#94a3b8; font-size:0.85rem;">Henüz bir logo görseli yüklenmedi.</span>`;
-            }
+            } else { previewBox.innerHTML = `<span style="color:#94a3b8; font-size:0.85rem;">Henüz logo yok.</span>`; }
         }
 
         function removeBrandLogo() {
@@ -1049,7 +819,7 @@
             };
             if(db) db.ref('brand_info').set(brandInfo);
             renderBrandInfo();
-            alert("Logo ve marka bilgileri başarıyla güncellendi!");
+            alert("Logo ve marka ayarları kaydedildi!");
         }
 
         function renderAmenitiesButtons() {
@@ -1069,9 +839,7 @@
         function toggleAmenity(id) {
             if (selectedAmenities.includes(id)) {
                 selectedAmenities = selectedAmenities.filter(a => a !== id);
-            } else {
-                selectedAmenities.push(id);
-            }
+            } else { selectedAmenities.push(id); }
             renderAmenitiesButtons();
         }
 
@@ -1096,7 +864,6 @@
                 document.getElementById('crop-modal').style.display = 'none';
                 return;
             }
-
             const file = cropQueue[0];
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -1129,6 +896,8 @@
             if (cropTargetType === 'hero') loadingId = 'hero-loading';
             if (cropTargetType === 'about') loadingId = 'about-loading';
             if (cropTargetType === 'brand') loadingId = 'brand-loading';
+            if (cropTargetType === 'history') loadingId = 'history-loading';
+            if (cropTargetType === 'qr') loadingId = 'qr-loading';
 
             document.getElementById(loadingId).style.display = 'block';
 
@@ -1152,6 +921,12 @@
                         } else if (cropTargetType === 'brand') {
                             document.getElementById('admin-brand-logo-url').value = url;
                             renderBrandLogoPreview();
+                        } else if (cropTargetType === 'history') {
+                            currentHistoryImages.push(url);
+                            renderHistoryImagesPreview();
+                        } else if (cropTargetType === 'qr') {
+                            document.getElementById('admin-qr-img-url').value = url;
+                            renderQRPreview();
                         } else {
                             currentRoomImages.push(url);
                             renderRoomImagesPreview();
@@ -1192,7 +967,6 @@
             btn.classList.add('active');
         }
 
-        /* YENİ GİRİŞ KISAYOLU (#kutlubay) */
         function checkHash() {
             if (window.location.hash === '#kutlubay') {
                 const password = prompt("Lütfen Admin Panel Şifresini Giriniz:");
@@ -1203,6 +977,7 @@
                     renderAdminRooms();
                     renderAdminHeroList();
                     loadAdminBrandForm();
+                    loadAdminHistoryForm();
                     loadAdminAboutForm();
                     loadAdminContactForm();
                 } else {
@@ -1224,6 +999,7 @@
             renderCustomerRooms();
             renderHeroSlider();
             renderBrandInfo();
+            renderHistoryInfo();
             renderAboutInfo();
             renderContactInfo();
         }
@@ -1233,6 +1009,7 @@
             renderCustomerRooms();
             renderHeroSlider();
             renderBrandInfo();
+            renderHistoryInfo();
             renderAboutInfo();
             renderContactInfo();
             checkHash();
@@ -1294,7 +1071,7 @@
             };
             if (db) db.ref('about_info').set(aboutInfo);
             renderAboutInfo();
-            alert("Hakkımızda bilgileri başarıyla güncellendi!");
+            alert("Hakkımızda bilgileri güncellendi!");
         }
 
         function renderCustomerRooms() {
@@ -1475,7 +1252,7 @@
             resetRoomForm();
             renderAdminRooms();
             renderCustomerRooms();
-            alert("Oda başarıyla kaydedildi!");
+            alert("Oda kaydedildi!");
         }
 
         function resetRoomForm() {
@@ -1522,6 +1299,15 @@
             if(document.getElementById('link-phone')) document.getElementById('link-phone').href = `tel:${cleanPhone}`;
             if(document.getElementById('link-whatsapp')) document.getElementById('link-whatsapp').href = `https://wa.me/${rawWhatsapp}`;
             if(document.getElementById('site-email')) document.getElementById('site-email').innerText = contactInfo.email;
+
+            const qrImg = document.getElementById('display-qr-img');
+            if(qrImg) {
+                if(contactInfo.qrUrl) {
+                    qrImg.src = contactInfo.qrUrl;
+                } else if(contactInfo.qrLink) {
+                    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(contactInfo.qrLink)}`;
+                }
+            }
         }
 
         function loadAdminContactForm() {
@@ -1529,6 +1315,23 @@
             document.getElementById('admin-contact-phone').value = contactInfo.phone || '';
             document.getElementById('admin-contact-whatsapp').value = contactInfo.whatsappRaw || contactInfo.whatsapp || '';
             document.getElementById('admin-contact-email').value = contactInfo.email || '';
+            document.getElementById('admin-qr-img-url').value = contactInfo.qrUrl || '';
+            document.getElementById('admin-qr-link').value = contactInfo.qrLink || 'https://kutlubayotel.com';
+            renderQRPreview();
+        }
+
+        function renderQRPreview() {
+            const box = document.getElementById('qr-img-preview-box');
+            if(!box) return;
+            const qrUrl = document.getElementById('admin-qr-img-url').value;
+            if(qrUrl) {
+                box.innerHTML = `<img src="${qrUrl}" style="height:80px; background:#fff; padding:4px; border-radius:4px;"> <button type="button" class="btn-gold" style="width:auto; background:#ef4444; color:#fff; padding:4px 8px; font-size:0.75rem;" onclick="removeCustomQR()">Özel QR'ı Sil</button>`;
+            } else { box.innerHTML = `<span style="color:#94a3b8; font-size:0.8rem;">Yüklü özel QR resim yok (Link esas alınıyor).</span>`; }
+        }
+
+        function removeCustomQR() {
+            document.getElementById('admin-qr-img-url').value = '';
+            renderQRPreview();
         }
 
         function saveContactInfo(e) {
@@ -1539,12 +1342,14 @@
                 phone: document.getElementById('admin-contact-phone').value,
                 whatsapp: "+" + rawWa,
                 whatsappRaw: rawWa,
-                email: document.getElementById('admin-contact-email').value
+                email: document.getElementById('admin-contact-email').value,
+                qrUrl: document.getElementById('admin-qr-img-url').value,
+                qrLink: document.getElementById('admin-qr-link').value
             };
 
             if (db) db.ref('contact_info').set(contactInfo);
             renderContactInfo();
-            alert("İletişim bilgileri güncellendi!");
+            alert("İletişim & QR Kod bilgileri güncellendi!");
         }
     </script>
 </body>

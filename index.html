@@ -93,7 +93,7 @@
         .section-title { text-align: center; font-size: 2rem; color: var(--text-dark); margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; position: relative; }
         .section-title::after { content: ''; display: block; width: 60px; height: 3px; background: var(--accent); margin: 8px auto 0 auto; border-radius: 2px; }
 
-        /* ODA LİSTESİ (KAYDIRMASIZ ÖZELLİKLER VE RESPONSIVE TASARIM) */
+        /* ODA LİSTESİ */
         .rooms-scroll-wrapper { display: flex; gap: 24px; overflow-x: auto; padding-bottom: 20px; scroll-snap-type: x mandatory; }
         .rooms-scroll-wrapper::-webkit-scrollbar { height: 6px; }
         .rooms-scroll-wrapper::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
@@ -105,11 +105,11 @@
         .room-media-item { flex: 0 0 100%; height: 100%; object-fit: cover; scroll-snap-align: start; width: 100%; }
         .room-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .room-title { font-size: 1.25rem; margin-bottom: 8px; color: var(--text-dark); font-weight: 700; }
-        .room-status { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; margin-bottom: 10px; }
+        .room-status { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; margin-bottom: 10px; margin-right: 5px; }
         .status-available { background: #dcfce7; color: #15803d; }
         .status-full { background: #fee2e2; color: #b91c1c; }
+        .room-capacity-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; background: #e0f2fe; color: #0369a1; margin-bottom: 10px; }
         
-        /* KAYDIRMASIZ ÖZELLİK LİSTESİ */
         .room-amenities-list { 
             display: flex; 
             flex-wrap: wrap; 
@@ -154,7 +154,7 @@
         .form-group label { display: block; font-size: 0.85rem; color: var(--text-dark); margin-bottom: 6px; font-weight: 600; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: #f8fafc; color: var(--text-dark); outline: none; }
 
-        /* ADMIN PANEL */
+        /* ADMIN PANEL YENİ SEÇİM BUTONLARI */
         #admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0f172a; color: #fff; z-index: 10000; overflow-y: auto; padding: 25px; }
         .admin-nav { display: flex; gap: 10px; margin: 20px 0; border-bottom: 1px solid #334155; padding-bottom: 12px; overflow-x: auto; }
         .admin-tab-btn { background: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; white-space: nowrap; }
@@ -170,6 +170,12 @@
         .preview-thumb-box { position: relative; width: 75px; height: 75px; border-radius: 6px; overflow: hidden; border: 1px solid var(--accent); }
         .preview-thumb-box img { width: 100%; height: 100%; object-fit: cover; }
         .preview-thumb-del { position: absolute; top: 2px; right: 2px; background: rgba(239, 68, 68, 0.9); color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; cursor: pointer; }
+
+        /* YAN YANA BUTON SEÇİM GRUPLARI */
+        .btn-radio-group { display: flex; gap: 5px; background: #0f172a; padding: 4px; border-radius: 8px; border: 1px solid #334155; }
+        .btn-radio-group label { flex: 1; text-align: center; margin: 0; padding: 8px 4px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; color: #94a3b8; font-weight: bold; transition: 0.2s; }
+        .btn-radio-group input[type="radio"] { display: none; }
+        .btn-radio-group input[type="radio"]:checked + label { background: var(--accent); color: #fff; }
 
         /* CROPPER MODAL */
         #crop-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 20000; flex-direction: column; justify-content: center; align-items: center; padding: 15px; }
@@ -190,6 +196,7 @@
             .room-card { flex: 0 0 88%; }
             .collage-item { height: 140px; }
             .about-img-box { height: 220px; }
+            .btn-radio-group { flex-wrap: wrap; }
         }
     </style>
 </head>
@@ -393,11 +400,37 @@
                         <input type="hidden" id="edit-room-id">
                         <div class="form-group">
                             <label style="color:#fff;">Oda Başlığı</label>
-                            <input type="text" id="admin-room-title" required placeholder="Örn: Süit Deniz Manzaralı Oda">
+                            <input type="text" id="admin-room-title" required placeholder="Örn: Deluxe Suit">
                         </div>
                         <div class="form-group">
                             <label style="color:#fff;">Fiyat (TL/Gece)</label>
                             <input type="number" id="admin-room-price" required placeholder="1500">
+                        </div>
+
+                        <!-- YAN YANA DURUM VE KİŞİ SAYISI SEÇİMİ -->
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                            <div style="flex: 1;">
+                                <label style="color:#fff; font-size: 0.85rem; font-weight: bold; display: block; margin-bottom: 6px;">Durum</label>
+                                <div class="btn-radio-group">
+                                    <input type="radio" name="adminRoomStatus" id="st_available" value="available" checked>
+                                    <label for="st_available">Müsait</label>
+                                    <input type="radio" name="adminRoomStatus" id="st_full" value="full">
+                                    <label for="st_full">Dolu</label>
+                                </div>
+                            </div>
+                            <div style="flex: 1;">
+                                <label style="color:#fff; font-size: 0.85rem; font-weight: bold; display: block; margin-bottom: 6px;">Kapasite</label>
+                                <div class="btn-radio-group">
+                                    <input type="radio" name="adminRoomCapacity" id="cap_1" value="1 Kişilik" checked>
+                                    <label for="cap_1">1 Kişi</label>
+                                    <input type="radio" name="adminRoomCapacity" id="cap_2" value="2 Kişilik">
+                                    <label for="cap_2">2 Kişi</label>
+                                    <input type="radio" name="adminRoomCapacity" id="cap_3" value="3 Kişilik">
+                                    <label for="cap_3">3 Kişi</label>
+                                    <input type="radio" name="adminRoomCapacity" id="cap_4" value="4+ Kişilik">
+                                    <label for="cap_4">4+ Kişi</label>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -412,15 +445,6 @@
                             <div class="uploaded-images-preview" id="room-images-preview"></div>
                         </div>
 
-                        <div class="form-group">
-                            <label style="color:#fff;">Müsaitlik Durumu</label>
-                            <select id="admin-room-status">
-                                <option value="available">Müsait</option>
-                                <option value="available">ÇİFT KİŞİ</option>
-                                <option value="available">TEK KİŞİ</option>
-                                <option value="full">Dolu / Rezerve</option>
-                            </select>
-                        </div>
                         <button type="submit" class="btn-gold">Odayı Kaydet</button>
                         <button type="button" class="btn-gold" onclick="resetRoomForm()" style="background:#64748b; color:#fff; margin-top:8px;">Formu Temizle</button>
                     </form>
@@ -626,7 +650,6 @@
         let cropQueue = [];
         let cropTargetType = ''; 
 
-        /* DİL SEÇENEĞİNİ SAYFA YENİLENİNCE SAKLAMA MEKANİZMASI */
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'tr',
@@ -668,7 +691,7 @@
         } catch(e) { console.error("Firebase hatası:", e); }
 
         let rooms = [
-            { id: 'r_1', title: 'Standart Çift Kişilik Oda', desc: 'Konforlu çift kişilik yatak, klima, TV ve Wi-Fi.', price: '1500', images: ['https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800'], amenities: ['wifi', 'ac', 'tv'], status: 'available' }
+            { id: 'r_1', title: 'Standart Çift Kişilik Oda', price: '1500', capacity: '2 Kişilik', images: ['https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800'], amenities: ['wifi', 'ac', 'tv'], status: 'available' }
         ];
 
         let heroMediaList = [
@@ -1125,6 +1148,10 @@
                     ? `<span class="room-status status-available">Müsait</span>`
                     : `<span class="room-status status-full">Dolu</span>`;
 
+                const capacityTag = room.capacity 
+                    ? `<span class="room-capacity-badge">👤 ${room.capacity}</span>`
+                    : '';
+
                 const btnTag = room.status === 'available'
                     ? `<button class="btn-gold" onclick="openBookingModal('${room.title}')">Rezervasyon Yap</button>`
                     : `<button class="btn-gold" style="background:#94a3b8; color:#fff; cursor:not-allowed;" disabled>Dolu</button>`;
@@ -1137,8 +1164,7 @@
                         <div class="room-info">
                             <div>
                                 <div class="room-title">${room.title}</div>
-                                ${statusTag}
-                                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 8px;">${room.desc}</p>
+                                <div>${statusTag}${capacityTag}</div>
                                 ${amenitiesHtml}
                             </div>
                             <div>
@@ -1240,7 +1266,7 @@
                     <div style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px; border-radius:6px;">
                         <div>
                             <strong style="color:#fff;">${room.title}</strong> - <span style="color:var(--accent);">${room.price} TL</span>
-                            <br><small style="color:#94a3b8;">Fotoğraf Sayısı: ${imgCount}</small>
+                            <br><small style="color:#94a3b8;">${room.capacity || '1 Kişilik'} | ${room.status === 'available' ? 'Müsait' : 'Dolu'}</small>
                         </div>
                         <div>
                             <button class="btn-gold" style="width:auto; padding:4px 8px; font-size:0.8rem;" onclick="editRoom('${room.id}')">Düzenle</button>
@@ -1255,18 +1281,21 @@
             e.preventDefault();
             const editId = document.getElementById('edit-room-id').value;
             const title = document.getElementById('admin-room-title').value;
-            const desc = document.getElementById('admin-room-desc').value;
             const price = document.getElementById('admin-room-price').value;
-            const status = document.getElementById('admin-room-status').value;
+            
+            // Seçili radyo buton değerlerini alma
+            const statusEl = document.querySelector('input[name="adminRoomStatus"]:checked');
+            const capacityEl = document.querySelector('input[name="adminRoomCapacity"]:checked');
+            const status = statusEl ? statusEl.value : 'available';
+            const capacity = capacityEl ? capacityEl.value : '1 Kişilik';
 
             if (currentRoomImages.length === 0) return alert("Lütfen en az 1 fotoğraf ekleyin!");
 
             const roomData = {
                 id: editId || 'r_' + Date.now(),
-                title, desc, price,
+                title, price, status, capacity,
                 images: currentRoomImages,
-                amenities: selectedAmenities,
-                status
+                amenities: selectedAmenities
             };
 
             if(editId) {
@@ -1284,6 +1313,8 @@
         function resetRoomForm() {
             document.getElementById('room-form').reset();
             document.getElementById('edit-room-id').value = '';
+            document.getElementById('st_available').checked = true;
+            document.getElementById('cap_1').checked = true;
             selectedAmenities = [];
             currentRoomImages = [];
             renderAmenitiesButtons();
@@ -1295,9 +1326,14 @@
             if(room) {
                 document.getElementById('edit-room-id').value = room.id;
                 document.getElementById('admin-room-title').value = room.title;
-                document.getElementById('admin-room-desc').value = room.desc;
                 document.getElementById('admin-room-price').value = room.price;
-                document.getElementById('admin-room-status').value = room.status;
+
+                if (room.status === 'full') document.getElementById('st_full').checked = true;
+                else document.getElementById('st_available').checked = true;
+
+                const capRadio = document.querySelector(`input[name="adminRoomCapacity"][value="${room.capacity}"]`);
+                if (capRadio) capRadio.checked = true;
+                else document.getElementById('cap_1').checked = true;
 
                 selectedAmenities = room.amenities || [];
                 currentRoomImages = room.images ? [...room.images] : (room.media ? [room.media] : []);
@@ -1380,4 +1416,3 @@
     </script>
 </body>
 </html>
-

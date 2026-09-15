@@ -27,7 +27,7 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: var(--primary); color: var(--text-dark); overflow-x: hidden; }
+        body { background-color: var(--primary); color: var(--text-dark); overflow-x: hidden; width: 100%; }
 
         /* NAVBAR */
         .navbar {
@@ -61,14 +61,14 @@
         .hero-banner {
             height: 60vh; min-height: 420px; width: 100%; position: relative;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; padding: 20px;
+            text-align: center; padding: 20px; overflow: hidden;
         }
         .bg-slider { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .bg-slide-media { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s ease-in-out; }
         .bg-slide-media.active { opacity: 1; }
         .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(15,23,42,0.85) 100%); z-index: 2; }
-        .hero-content { z-index: 3; max-width: 800px; }
-        .hotel-title { font-size: 2.6rem; font-weight: 800; color: #ffffff; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 3px; }
+        .hero-content { z-index: 3; max-width: 800px; width: 100%; }
+        .hotel-title { font-size: 2.6rem; font-weight: 800; color: #ffffff; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 3px; word-break: break-word; }
         .hero-subtitle { font-size: 1.1rem; color: #f1f5f9; margin-bottom: 25px; font-weight: 300; }
 
         /* REZERVASYON ÇUBUĞU */
@@ -89,27 +89,36 @@
         .btn-gold:hover { background: var(--accent-hover); transform: translateY(-1px); }
 
         /* GENEL CONTAINER & BAŞLIKLAR */
-        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; width: 100%; }
         .section-title { text-align: center; font-size: 2rem; color: var(--text-dark); margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; position: relative; }
         .section-title::after { content: ''; display: block; width: 60px; height: 3px; background: var(--accent); margin: 8px auto 0 auto; border-radius: 2px; }
 
-        /* ODA LİSTESİ */
+        /* ODA LİSTESİ (KAYDIRMASIZ ÖZELLİKLER VE RESPONSIVE TASARIM) */
         .rooms-scroll-wrapper { display: flex; gap: 24px; overflow-x: auto; padding-bottom: 20px; scroll-snap-type: x mandatory; }
         .rooms-scroll-wrapper::-webkit-scrollbar { height: 6px; }
         .rooms-scroll-wrapper::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
-        .room-card { flex: 0 0 350px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; overflow: hidden; scroll-snap-align: start; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); transition: 0.3s; }
+        .room-card { flex: 0 0 350px; max-width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; overflow: hidden; scroll-snap-align: start; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); transition: 0.3s; }
         .room-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
-        .room-media-box { width: 100%; height: 230px; background: #f1f5f9; position: relative; }
+        .room-media-box { width: 100%; height: 230px; background: #f1f5f9; position: relative; overflow: hidden; }
         .room-slider-track { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
         .room-slider-track::-webkit-scrollbar { display: none; }
-        .room-media-item { flex: 0 0 100%; height: 100%; object-fit: cover; scroll-snap-align: start; }
+        .room-media-item { flex: 0 0 100%; height: 100%; object-fit: cover; scroll-snap-align: start; width: 100%; }
         .room-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .room-title { font-size: 1.25rem; margin-bottom: 8px; color: var(--text-dark); font-weight: 700; }
         .room-status { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; margin-bottom: 10px; }
         .status-available { background: #dcfce7; color: #15803d; }
         .status-full { background: #fee2e2; color: #b91c1c; }
-        .room-amenities-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; max-height: 100px; overflow-y: auto; }
-        .amenity-badge { background: #f1f5f9; border: 1px solid var(--border-color); color: var(--text-dark); font-size: 0.72rem; padding: 4px 8px; border-radius: 6px; font-weight: 500; }
+        
+        /* KAYDIRMASIZ ÖZELLİK LİSTESİ */
+        .room-amenities-list { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 6px; 
+            margin: 12px 0; 
+            max-height: none; 
+            overflow-y: visible; 
+        }
+        .amenity-badge { background: #f1f5f9; border: 1px solid var(--border-color); color: var(--text-dark); font-size: 0.72rem; padding: 4px 8px; border-radius: 6px; font-weight: 500; display: inline-flex; align-items: center; }
 
         /* HATAY/DÖRTYOL TARİH BÖLÜMÜ VE FOTO KOLAJI */
         .history-section { background: #ffffff; border: 1px solid var(--border-color); border-radius: 14px; padding: 40px 30px; margin-top: 50px; box-shadow: var(--shadow-sm); }
@@ -166,12 +175,21 @@
         #crop-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 20000; flex-direction: column; justify-content: center; align-items: center; padding: 15px; }
         .crop-container { width: 90vw; max-width: 850px; height: 60vh; background: #000; border-radius: 8px; overflow: hidden; }
 
+        /* RESPONSIVE MOBİL UYUM DÜZENLEMELERİ */
         @media(max-width: 768px) {
-            .hero-banner { height: 45vh; }
-            .hotel-title { font-size: 1.8rem; }
-            .history-grid, .about-section, .admin-grid { grid-template-columns: 1fr; }
+            .navbar { padding: 10px 15px; }
+            .brand-title { font-size: 1rem; }
+            .brand-subtitle { font-size: 0.55rem; }
+            .hero-banner { height: 45vh; min-height: 320px; }
+            .hotel-title { font-size: 1.8rem; letter-spacing: 1px; }
+            .hero-subtitle { font-size: 0.9rem; }
+            .quick-booking-bar { width: 95%; padding: 15px; margin-top: -30px; }
+            .qb-item { min-width: 100%; }
+            .history-grid, .about-section, .admin-grid { grid-template-columns: 1fr; gap: 20px; }
+            .history-section, .about-section { padding: 25px 15px; }
             .room-card { flex: 0 0 88%; }
             .collage-item { height: 140px; }
+            .about-img-box { height: 220px; }
         }
     </style>
 </head>
@@ -190,7 +208,6 @@
             <div id="lang-selector">
                 <div id="google_translate_element"></div>
             </div>
-            <!-- YENİ TIKLANABİLİR MENÜ BUTONU -->
             <div class="menu-icon" onclick="toggleNavMenu()">☰</div>
         </div>
     </nav>
@@ -229,7 +246,7 @@
                 <select id="qb-guests">
                     <option value="1 Yetişkin">1 Yetişkin</option>
                     <option value="2 Yetişkin">2 Yetişkin</option>
-                    <option value="2 Yetişkin + 1 Çocuk">2 Yetişkin</option>
+                    <option value="2 Yetişkin + 1 Çocuk">2 Yetişkin + 1 Çocuk</option>
                     <option value="3 Yetişkin">3 Yetişkin</option>
                 </select>
             </div>
@@ -246,7 +263,7 @@
                 <div class="rooms-scroll-wrapper" id="rooms-container"></div>
             </div>
 
-            <!-- TARİH & KÜLTÜR BÖLÜMÜ (HATAY VE DÖRTYOL TARİHİ KOLAJI) -->
+            <!-- TARİH & KÜLTÜR BÖLÜMÜ -->
             <div class="history-section" id="section-history">
                 <h2 class="section-title" id="display-history-title">Tarih & Kültür Mozaiği: Hatay & Dörtyol</h2>
                 <div class="history-grid">
@@ -445,7 +462,7 @@
             </div>
         </div>
 
-        <!-- TAB 3: HATAY/DÖRTYOL TARİH BÖLÜMÜ YÖNETİMİ (YENİ) -->
+        <!-- TAB 3: HATAY/DÖRTYOL TARİH BÖLÜMÜ YÖNETİMİ -->
         <div id="history-tab" class="admin-tab-content">
             <div style="background:#1e293b; padding:20px; border-radius:10px; max-width:800px;">
                 <h3 style="color:var(--accent); margin-bottom:12px;">🏛️ Hatay & Dörtyol Tarihi Bölümü</h3>
@@ -613,12 +630,23 @@
         let cropQueue = [];
         let cropTargetType = ''; 
 
+        /* DİL SEÇENEĞİNİ SAYFA YENİLENİNCE SAKLAMA MEKANİZMASI */
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'tr',
                 includedLanguages: 'tr,en,de,ru,ar,fr,es',
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE
             }, 'google_translate_element');
+
+            setTimeout(() => {
+                const selectEl = document.querySelector('.goog-te-combo');
+                if (selectEl) {
+                    selectEl.addEventListener('change', function() {
+                        document.cookie = "googtrans=" + this.value + ";path=/;domain=" + window.location.hostname;
+                        document.cookie = "googtrans=" + this.value + ";path=/";
+                    });
+                }
+            }, 1000);
         }
 
         function toggleNavMenu() {
@@ -655,7 +683,7 @@
 
         let historyInfo = {
             title: "Tarih & Kültür Mozaiği: Hatay & Dörtyol",
-            desc: "Hatay, binlerce yıllık geçmişi, farklı medeniyetlerin izlerini taşıyan hoşgörü kültürü ve zengin gastronomi mirası ile dünyanın sayılı tarih merkezlerinden biridir.\n\nMilli Mücadele'de 'İlk Kurşun'un atıldığı Dörtyol ilçemiz ise, narenciye bahçeleri, Amanos Dağları'nın eşsiz doğası ve tarihi direniş ruhu ile bu özel coğrafyanın gurur kaynağıdır. Geçmişten günümüze uzanan bu eşsiz mirası keşfetmek için sizleri Kutlubay Otel konforunda ağırlamaktan onur duyuyoruz.",
+            desc: "Hatay, binlerce yıllık geçmişi, farklı medeniyetlerin izlerini taşıyan hoşgörü kültürü ve zengin gastronomi mirası ile dünyanın sayılı tarih merkezlerinden biridir.\n\nMilli Mücadele'de 'İlk Kurşun'un atıldığı Dörtyol ilçemiz ise, narenciye bahçeleri, Amanos Dağları'nın eşsiz doğası ve tarihi direniş ruhu ile bu özel coğrafyanın gurur kaynağıdır. Geçmişten günümüze uzanan bu eşsiz mirasi keşfetmek için sizleri Kutlubay Otel konforunda ağırlamaktan onur duyuyoruz.",
             images: [
                 "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=600",
                 "https://images.unsplash.com/photo-1541971875076-8f970d573be6?w=600",
@@ -1356,3 +1384,4 @@
     </script>
 </body>
 </html>
+

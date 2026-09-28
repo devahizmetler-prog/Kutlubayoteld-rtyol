@@ -242,10 +242,10 @@
 
     <!-- NAV POPUP MENÜSÜ -->
     <div class="nav-menu-overlay" id="nav-dropdown-menu">
-        <a onclick="openSection('section-rooms')">🏨 Odalarımız</a>
-        <a onclick="openSection('section-history')">🏛️ Hatay & Dörtyol Tarihi</a>
-        <a onclick="openSection('section-about')">ℹ️ Hakkımızda</a>
-        <a onclick="openSection('section-contact')">📞 İletişim</a>
+        <a onclick="openSection('section-rooms')">Odalarımız</a>
+        <a onclick="openSection('section-history')">Hatay bir Tarih Mozaiği</a>
+        <a onclick="openSection('section-about')">Hakkımızda</a>
+        <a onclick="openSection('section-contact')">İletişim</a>
     </div>
 
     <div id="customer-view">
@@ -406,12 +406,12 @@
         </div>
 
         <div class="admin-nav">
-            <button class="admin-tab-btn active" onclick="switchAdminTab('rooms-tab', this)">🏨 Odaları Yönet</button>
-            <button class="admin-tab-btn" onclick="switchAdminTab('brand-tab', this)">🏷️ Logo & Marka</button>
-            <button class="admin-tab-btn" onclick="switchAdminTab('history-tab', this)">🏛️ Hatay/Dörtyol Tarihi</button>
-            <button class="admin-tab-btn" onclick="switchAdminTab('about-tab', this)">ℹ️ Hakkımızda</button>
-            <button class="admin-tab-btn" onclick="switchAdminTab('hero-tab', this)">🖼️ Arka Planlar</button>
-            <button class="admin-tab-btn" onclick="switchAdminTab('contact-tab', this)">⚙️ İletişim & QR</button>
+            <button class="admin-tab-btn active" onclick="switchAdminTab('rooms-tab', this)">Odaları Yönet</button>
+            <button class="admin-tab-btn" onclick="switchAdminTab('brand-tab', this)">Logo & Marka</button>
+            <button class="admin-tab-btn" onclick="switchAdminTab('history-tab', this)">Hatay/Dörtyol Tarihi</button>
+            <button class="admin-tab-btn" onclick="switchAdminTab('about-tab', this)">Hakkımızda</button>
+            <button class="admin-tab-btn" onclick="switchAdminTab('hero-tab', this)">Arka Planlar</button>
+            <button class="admin-tab-btn" onclick="switchAdminTab('contact-tab', this)">İletişim & QR</button>
         </div>
 
         <!-- TAB 1: ODA YÖNETİMİ -->
@@ -461,7 +461,7 @@
                         <div class="form-group">
                             <label style="color:#fff;">Oda Fotoğrafları</label>
                             <input type="file" accept="image/*" multiple onchange="startMultipleCropProcess(this, 'room')">
-                            <div id="room-loading" class="loading-text">⏳ Yükleniyor...</div>
+                            <div id="room-loading" class="loading-text">Yükleniyor...</div>
                             <div class="uploaded-images-preview" id="room-images-preview"></div>
                         </div>
 
@@ -479,14 +479,14 @@
         <!-- TAB 2: BRAND -->
         <div id="brand-tab" class="admin-tab-content">
             <div style="background:#1e293b; padding:15px; border-radius:8px; max-width:600px;">
-                <h3 style="color:var(--accent); margin-bottom:10px;">🏷️ Logo & Marka Ayarları</h3>
+                <h3 style="color:var(--accent); margin-bottom:10px;">Logo & Marka Ayarları</h3>
                 <form onsubmit="saveBrandSettings(event)">
                     <div class="form-group"><label style="color:#fff;">Başlık</label><input type="text" id="admin-brand-title" required></div>
                     <div class="form-group"><label style="color:#fff;">Alt Başlık</label><input type="text" id="admin-brand-subtitle"></div>
                     <div class="form-group">
                         <label style="color:#fff;">Logo Görseli</label>
                         <input type="file" accept="image/*" onchange="startSingleCropProcess(this, 'brand')">
-                        <div id="brand-loading" class="loading-text">⏳ Yükleniyor...</div>
+                        <div id="brand-loading" class="loading-text">Yükleniyor...</div>
                         <input type="hidden" id="admin-brand-logo-url">
                         <div style="margin-top:10px;" id="brand-logo-preview-box"></div>
                     </div>
@@ -498,14 +498,14 @@
         <!-- TAB 3: HISTORY -->
         <div id="history-tab" class="admin-tab-content">
             <div style="background:#1e293b; padding:15px; border-radius:8px; max-width:700px;">
-                <h3 style="color:var(--accent); margin-bottom:10px;">🏛️ Hatay & Dörtyol Tarihi</h3>
+                <h3 style="color:var(--accent); margin-bottom:10px;">Hatay Bir Tarih Mozai</h3>
                 <form onsubmit="saveHistoryInfo(event)">
                     <div class="form-group"><label style="color:#fff;">Başlık</label><input type="text" id="admin-history-title" required></div>
                     <div class="form-group"><label style="color:#fff;">Metin</label><textarea id="admin-history-desc" rows="5" required></textarea></div>
                     <div class="form-group">
                         <label style="color:#fff;">Kolaj Görselleri</label>
                         <input type="file" accept="image/*" multiple onchange="startMultipleCropProcess(this, 'history')">
-                        <div id="history-loading" class="loading-text">⏳ Yükleniyor...</div>
+                        <div id="history-loading" class="loading-text">Yükleniyor...</div>
                         <div class="uploaded-images-preview" id="history-images-preview"></div>
                     </div>
                     <button type="submit" class="btn-gold">Güncelle</button>
@@ -516,14 +516,14 @@
         <!-- TAB 4: ABOUT -->
         <div id="about-tab" class="admin-tab-content">
             <div style="background:#1e293b; padding:15px; border-radius:8px; max-width:600px;">
-                <h3 style="color:var(--accent); margin-bottom:10px;">ℹ️ Hakkımızda</h3>
+                <h3 style="color:var(--accent); margin-bottom:10px;">Hakkımızda</h3>
                 <form onsubmit="saveAboutInfo(event)">
                     <div class="form-group"><label style="color:#fff;">Başlık</label><input type="text" id="admin-about-title" required></div>
                     <div class="form-group"><label style="color:#fff;">Açıklama Metni</label><textarea id="admin-about-desc" rows="5" required></textarea></div>
                     <div class="form-group">
                         <label style="color:#fff;">Fotoğraf</label>
                         <input type="file" accept="image/*" onchange="startSingleCropProcess(this, 'about')">
-                        <div id="about-loading" class="loading-text">⏳ Yükleniyor...</div>
+                        <div id="about-loading" class="loading-text">Yükleniyor...</div>
                         <input type="hidden" id="admin-about-img-url">
                         <div style="margin-top:8px;" id="about-img-preview-box"></div>
                     </div>
@@ -535,7 +535,7 @@
         <!-- TAB 5: HERO -->
         <div id="hero-tab" class="admin-tab-content">
             <div style="background:#1e293b; padding:15px; border-radius:8px;">
-                <h3 style="color:var(--accent); margin-bottom:10px;">🖼️ Arka Plan Medyaları</h3>
+                <h3 style="color:var(--accent); margin-bottom:10px;">Arka Plan Medyaları</h3>
                 <div style="display:grid; grid-template-columns:1fr 2fr; gap:15px;">
                     <form onsubmit="addHeroMedia(event)">
                         <div class="form-group">
@@ -603,22 +603,18 @@
         const IMGBB_API_KEY = "E4b0ac1b3c9aefeef5fb9f825287b0d8";
 
         const availableAmenities = [
-            { id: 'wifi', label: '🛜 Ücretsiz Wi-Fi' },
-            { id: 'ac', label: '❄️ Klima' },
-            { id: 'tv', label: '🖥 LED TV' },
-            { id: 'jacuzzi', label: '🛁 Özel Jakuzi' },
-            { id: 'balcony', label: '🌅 Balkon' },
-            { id: 'seaview', label: '🌊 Deniz Manzarası' },
-            { id: 'mountainview', label: '🏔️ Doğa Manzarası' },
-            { id: 'breakfast', label: '🍳 Kahvaltı Dahil' },
-            { id: 'allinclusive', label: '🍽️ Her Şey Dahil' },
-            { id: 'minibar', label: '🥤 Minibar' },
-            { id: 'safe', label: '🔒 Çelik Kasa' },
-            { id: 'hairdryer', label: '💨 Saç Kurutma' },
-            { id: 'desk', label: '💻 Çalışma Masası' },
-            { id: 'soundproof', label: '🔇 Ses Yalıtımı' },
-            { id: 'coffee', label: '☕ Çay/Kahve Makinesi' },
-            { id: 'parking', label: '🅿️ Ücretsiz Otopark' }
+            { id: 'wifi', label: 'Ücretsiz Wi-Fi' },
+            { id: 'ac', label: 'Klima' },
+            { id: 'tv', label: 'LED TV' },
+            { id: 'jacuzzi', label: 'Özel Jakuzi' },
+            { id: 'breakfast', label: 'Kahvaltı Dahil' },
+            { id: 'allinclusive', label: 'Her Şey Dahil' },
+            { id: 'minibar', label: 'Minibar' },
+            { id: 'safe', label: 'Çelik Kasa' },
+            { id: 'hairdryer', label: 'Saç Kurutma' },
+            { id: 'desk', label: 'Çalışma Masası' },
+            { id: 'soundproof', label: 'Ses Yalıtımı' },
+            { id: 'coffee', label: 'Çay/Kahve Makinesi' },
         ];
 
         let selectedAmenities = [];

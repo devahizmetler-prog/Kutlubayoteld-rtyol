@@ -180,10 +180,21 @@
         .history-card-header { border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
         .history-card-title { font-size: 1.3rem; color: var(--text-dark); font-weight: 800; }
         .history-card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
+        
+        /* HATAY YUMUŞAK GEÇİŞLİ (CROSSFADE) GALERİ */
         .history-gallery-box { width: 100%; height: 260px; background: #f1f5f9; border-radius: 8px; overflow: hidden; position: relative; border: 1px solid var(--border-color); }
-        .history-slider-track { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
-        .history-slider-track::-webkit-scrollbar { display: none; }
-        .history-media-item { flex: 0 0 100%; height: 100%; object-fit: cover; scroll-snap-align: start; width: 100%; }
+        .history-fade-container { position: relative; width: 100%; height: 100%; }
+        .history-fade-item { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            opacity: 0; 
+            transition: opacity 1.2s ease-in-out; 
+        }
+        .history-fade-item.active { opacity: 1; }
 
         .about-section { background: #ffffff; border: 1px solid var(--border-color); padding: 25px 20px; border-radius: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: center; box-shadow: var(--shadow-sm); }
         .about-img-box { width: 100%; height: 260px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
@@ -265,7 +276,7 @@
     <!-- NAV POPUP MENÜSÜ -->
     <div class="nav-menu-overlay" id="nav-dropdown-menu">
         <a onclick="openSection('section-rooms')">Odalarımız</a>
-        <a onclick="openSection('section-history')">Hatay & Dörtyol Tarihi</a>
+        <a onclick="openSection('section-history')">Hatay</a>
         <a onclick="openSection('section-about')">Hakkımızda</a>
         <a onclick="openSection('section-contact')">İletişim</a>
     </div>
@@ -318,9 +329,9 @@
                 <div class="rooms-scroll-wrapper" id="rooms-container"></div>
             </div>
 
-            <!-- TARİH & KÜLTÜR BÖLÜMÜ -->
+            <!-- HATAY BÖLÜMÜ -->
             <div id="section-history" class="content-section">
-                <h2 class="section-title">Hatay & Dörtyol Tarihi</h2>
+                <h2 class="section-title">Hatay</h2>
                 <div class="history-list-wrapper" id="history-container"></div>
             </div>
 
@@ -354,7 +365,7 @@
                     <h4>Kategoriler</h4>
                     <ul>
                         <li><a onclick="openSection('section-rooms')">Odalarımız</a></li>
-                        <li><a onclick="openSection('section-history')">Hatay & Dörtyol Tarihi</a></li>
+                        <li><a onclick="openSection('section-history')">Hatay</a></li>
                         <li><a onclick="openSection('section-about')">Hakkımızda</a></li>
                         <li><a onclick="openSection('section-contact')">İletişim</a></li>
                     </ul>
@@ -423,7 +434,7 @@
         <div class="admin-nav">
             <button class="admin-tab-btn active" onclick="switchAdminTab('rooms-tab', this)">🏨 Odaları Yönet</button>
             <button class="admin-tab-btn" onclick="switchAdminTab('brand-tab', this)">🏷️ Logo & Marka</button>
-            <button class="admin-tab-btn" onclick="switchAdminTab('history-tab', this)">🏛️ Hatay/Dörtyol Tarihi</button>
+            <button class="admin-tab-btn" onclick="switchAdminTab('history-tab', this)">🏛️ Hatay</button>
             <button class="admin-tab-btn" onclick="switchAdminTab('about-tab', this)">ℹ️ Hakkımızda</button>
             <button class="admin-tab-btn" onclick="switchAdminTab('hero-tab', this)">🖼️ Arka Planlar</button>
             <button class="admin-tab-btn" onclick="switchAdminTab('contact-tab', this)">⚙️ İletişim & QR</button>
@@ -510,11 +521,11 @@
             </div>
         </div>
 
-        <!-- TAB 3: HISTORY (GÜNCELLENDİ) -->
+        <!-- TAB 3: HATAY BÖLÜMÜ -->
         <div id="history-tab" class="admin-tab-content">
             <div class="admin-grid">
                 <div style="background:#1e293b; padding:15px; border-radius:8px;">
-                    <h3 style="color:var(--accent); margin-bottom:10px;">Tarih Başlığı Ekle / Düzenle</h3>
+                    <h3 style="color:var(--accent); margin-bottom:10px;">Hatay İçeriği Ekle / Düzenle</h3>
                     <form id="history-form" onsubmit="saveHistoryItem(event)">
                         <input type="hidden" id="edit-history-id">
                         <div class="form-group">
@@ -523,7 +534,7 @@
                         </div>
                         <div class="form-group">
                             <label style="color:#fff;">Açıklama Metni</label>
-                            <textarea id="admin-history-desc" rows="5" required placeholder="Tarihi içerik açıklamasını yazınız..."></textarea>
+                            <textarea id="admin-history-desc" rows="5" required placeholder="Açıklamasını yazınız..."></textarea>
                         </div>
                         <div class="form-group">
                             <label style="color:#fff;">Fotoğraflar (1 veya Birden Fazla)</label>
@@ -536,7 +547,7 @@
                 </div>
 
                 <div style="background:#1e293b; padding:15px; border-radius:8px;">
-                    <h3 style="color:var(--accent); margin-bottom:10px;">Mevcut Tarihi Başlıklar</h3>
+                    <h3 style="color:var(--accent); margin-bottom:10px;">Mevcut Hatay Başlıkları</h3>
                     <div id="admin-history-container" style="display:flex; flex-direction:column; gap:8px;"></div>
                 </div>
             </div>
@@ -737,6 +748,7 @@
         let aboutInfo = { title: "", desc: "", img: "" };
         let contactInfo = { address: "", phone: "", whatsapp: "", whatsappRaw: "", email: "", qrUrl: "", qrLink: "" };
         let sliderInterval = null;
+        let historySliders = [];
 
         if (db) {
             db.ref('hero_media').on('value', snapshot => {
@@ -790,23 +802,27 @@
             }
         }
 
-        /* TARİH BAŞLIKLARI VE FOTOĞRAFLARI (ALT ALTA VE OTOMATİK SÜRGÜLÜ/KAYDIRMALI) */
+        /* HATAY BÖLÜMÜ - FOTOĞRAFLARDA YUMUŞAK GEÇİŞLİ (CROSSFADE) OTOMATİK SÜRGÜ SİSTEMİ */
         function renderCustomerHistory() {
             const container = document.getElementById('history-container');
             if(!container) return;
             container.innerHTML = '';
 
+            // Eski zamanlayıcıları temizle
+            historySliders.forEach(interval => clearInterval(interval));
+            historySliders = [];
+
             if (historyItems.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Henüz tarihi içerik eklenmedi.</p>';
+                container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Henüz Hatay içeriği eklenmedi.</p>';
                 return;
             }
             
-            historyItems.forEach(item => {
+            historyItems.forEach((item, index) => {
                 const imgs = item.images && item.images.length > 0 ? item.images : ['https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800'];
                 
                 let slidesHtml = '';
-                imgs.forEach(imgUrl => {
-                    slidesHtml += `<img src="${imgUrl}" class="history-media-item" alt="${item.title}">`;
+                imgs.forEach((imgUrl, imgIndex) => {
+                    slidesHtml += `<img src="${imgUrl}" class="history-fade-item ${imgIndex === 0 ? 'active' : ''}" alt="${item.title}">`;
                 });
 
                 container.innerHTML += `
@@ -816,7 +832,9 @@
                         </div>
                         <div class="history-card-body">
                             <div class="history-gallery-box">
-                                <div class="history-slider-track">${slidesHtml}</div>
+                                <div class="history-fade-container" id="history-slider-${index}">
+                                    ${slidesHtml}
+                                </div>
                             </div>
                             <div>
                                 <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.7; white-space:pre-line;">${item.desc}</p>
@@ -824,6 +842,26 @@
                         </div>
                     </div>
                 `;
+            });
+
+            // Otomatik Yumuşak Geçiş (Crossfade) Interval Başlat
+            historyItems.forEach((item, index) => {
+                const imgs = item.images && item.images.length > 0 ? item.images : [];
+                if (imgs.length > 1) {
+                    let currentImgIndex = 0;
+                    const sliderInterval = setInterval(() => {
+                        const sliderEl = document.getElementById(`history-slider-${index}`);
+                        if (!sliderEl) return;
+                        const slides = sliderEl.querySelectorAll('.history-fade-item');
+                        if (slides.length <= 1) return;
+                        
+                        slides[currentImgIndex].classList.remove('active');
+                        currentImgIndex = (currentImgIndex + 1) % slides.length;
+                        slides[currentImgIndex].classList.add('active');
+                    }, 3500); // 3.5 saniyede bir yumuşak geçiş yapar
+
+                    historySliders.push(sliderInterval);
+                }
             });
         }
 
@@ -1161,7 +1199,7 @@
             alert("Kaydedildi!");
         }
 
-        /* TARİH BAŞLIKLARI YÖNETİMİ (KAYDET, EDİT, SİL) */
+        /* HATAY YÖNETİMİ (KAYDET, EDİT, SİL) */
         function saveHistoryItem(e) {
             e.preventDefault();
             const editId = document.getElementById('edit-history-id').value;
@@ -1188,7 +1226,7 @@
             renderHistoryImagesPreview();
             renderAdminHistoryList();
             renderCustomerHistory();
-            alert("Tarihi Başlık Kaydedildi!");
+            alert("Hatay İçeriği Kaydedildi!");
         }
 
         function renderAdminHistoryList() {
@@ -1220,7 +1258,7 @@
         }
 
         function deleteHistoryItem(id) {
-            if(confirm("Bu tarihi başlığı silmek istediğinize emin misiniz?")) {
+            if(confirm("Bu içeriği silmek istediğinize emin misiniz?")) {
                 historyItems = historyItems.filter(h => h.id !== id);
                 if(db) db.ref('history_items').set(historyItems);
                 renderAdminHistoryList();

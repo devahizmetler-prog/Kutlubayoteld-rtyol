@@ -29,18 +29,29 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Times New Roman", Times, serif; }
         body { background-color: var(--primary); color: var(--text-dark); overflow-x: hidden; width: 100%; }
 
-        /* NAVBAR */
+        /* NAVBAR (ORTALANMIŞ LOGO YAPISI) */
         .navbar {
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 15px; background: #ffffff; position: sticky; top: 0;
             z-index: 1000; box-shadow: var(--shadow-sm); border-bottom: 1px solid var(--border-color);
+            min-height: 60px;
         }
-        .brand-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-dark); text-align: center; }
-        .brand-logo img { height: 36px; max-width: 120px; object-fit: contain; }
-        .brand-text { display: flex; flex-direction: column; align-items: center; }
-        .brand-title { font-size: 1.1rem; font-weight: 800; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; }
-        .brand-subtitle { font-size: 0.6rem; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; }
-        .nav-controls { display: flex; align-items: center; gap: 8px; }
+        .brand-logo { 
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            text-decoration: none; 
+        }
+        .brand-logo img { 
+            height: 48px; 
+            max-width: 180px; 
+            object-fit: contain; 
+            display: block;
+        }
+        .nav-controls { display: flex; align-items: center; gap: 8px; margin-left: auto; }
         
         /* GOOGLE ÇEVİRİ BUTONU */
         #lang-selector { background: #f1f5f9; border: 1px solid var(--border-color); padding: 2px 4px; border-radius: 6px; font-size: 0.75rem; }
@@ -48,7 +59,7 @@
         .goog-te-gadget-simple span { font-size: 0.75rem !important; }
         .goog-te-gadget-icon { display: none !important; }
 
-        .menu-icon { font-size: 1.5rem; cursor: pointer; color: var(--text-dark); padding: 5px; }
+        .menu-icon { font-size: 1.5rem; cursor: pointer; color: var(--text-dark); padding: 5px; z-index: 1001; }
 
         /* NAV DROPDOWN MENU */
         .nav-menu-overlay {
@@ -108,7 +119,7 @@
         .section-title { text-align: center; font-size: 1.8rem; color: var(--text-dark); margin-bottom: 25px; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; position: relative; }
         .section-title::after { content: ''; display: block; width: 60px; height: 3px; background: var(--accent); margin: 8px auto 0 auto; border-radius: 2px; }
 
-        /* ODALAR - KÜÇÜLTÜLMÜŞ KART YAPISI VE BUTON ROZETLER */
+        /* ODALAR */
         .rooms-scroll-wrapper { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 20px; scroll-snap-type: x mandatory; justify-content: flex-start; }
         .rooms-scroll-wrapper::-webkit-scrollbar { height: 6px; }
         .rooms-scroll-wrapper::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
@@ -144,7 +155,7 @@
 
         .room-capacity-info { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
 
-        /* ÖZELLİK ROZETLERİ (ÇERÇEVELİ KÜÇÜK BUTON GÖRÜNÜMÜ) */
+        /* ÖZELLİK ROZETLERİ */
         .room-badges-container { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
         .feature-badge {
             display: inline-flex;
@@ -234,12 +245,9 @@
     <nav class="navbar">
         <div class="menu-icon" onclick="toggleNavMenu()">☰</div>
 
+        <!-- YALNIZCA ORTALANMIŞ LOGO -->
         <a href="javascript:void(0)" onclick="showOnlyHero()" class="brand-logo">
-            <img id="site-logo-img" src="" alt="Logo" style="display:none;">
-            <div class="brand-text">
-                <span class="brand-title" id="display-brand-title">KUTLUBAY</span>
-                <span class="brand-subtitle" id="display-brand-subtitle">HOTEL & RESORT</span>
-            </div>
+            <img id="site-logo-img" src="" alt="Kutlubay Logo">
         </a>
 
         <div class="nav-controls">
@@ -757,16 +765,15 @@
         }
 
         function renderBrandInfo() {
-            if(document.getElementById('display-brand-title')) document.getElementById('display-brand-title').innerText = brandInfo.title || 'KUTLUBAY';
-            if(document.getElementById('display-brand-subtitle')) document.getElementById('display-brand-subtitle').innerText = brandInfo.subtitle || 'HOTEL & RESORT';
             if(document.getElementById('display-hero-title')) document.getElementById('display-hero-title').innerText = "Otel " + (brandInfo.title || 'Kutlubay');
             
             const logoImg = document.getElementById('site-logo-img');
             if(logoImg) {
                 if(brandInfo.logoUrl) {
                     logoImg.src = brandInfo.logoUrl;
-                    logoImg.style.display = 'block';
-                } else { logoImg.style.display = 'none'; }
+                } else {
+                    logoImg.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=200"; 
+                }
             }
         }
 
@@ -789,7 +796,7 @@
             if(document.getElementById('display-about-img') && aboutInfo.img) document.getElementById('display-about-img').src = aboutInfo.img;
         }
 
-        /* YENİLENMİŞ KÜÇÜK ODA KARTLARI VE ŞIK ÖZELLİK ROZETLERİ */
+        /* ODA KARTLARI VE ÖZELLİK ROZETLERİ */
         function renderCustomerRooms() {
             const container = document.getElementById('rooms-container');
             if(!container) return;
@@ -801,7 +808,6 @@
                 let slidesHtml = '';
                 roomImgs.forEach(img => { slidesHtml += `<img src="${img}" class="room-media-item" alt="${room.title}">`; });
 
-                // Çerçeveli küçük rozetler (Buton tarzı)
                 let badgesHtml = '<div class="room-badges-container">';
                 if (room.amenities && room.amenities.length > 0) {
                     room.amenities.forEach(amId => {
